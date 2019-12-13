@@ -1,23 +1,5 @@
 <template>
     <view class="content">
-        <view class="input-group">
-            <view class="input-row border">
-                <text class="title">账号：</text>
-                <m-input class="m-input" type="text" clearable focus v-model="account" placeholder="请输入账号"></m-input>
-            </view>
-            <view class="input-row">
-                <text class="title">密码：</text>
-                <m-input type="password" displayable v-model="password" placeholder="请输入密码"></m-input>
-            </view>
-        </view>
-        <view class="btn-row">
-            <button type="primary" class="primary" @tap="bindLogin">登录</button>
-        </view>
-        <view class="action-row">
-            <navigator url="../reg/reg">注册账号</navigator>
-            <text>|</text>
-            <navigator url="../pwd/pwd">忘记密码</navigator>
-        </view>
         <view class="oauth-row" v-if="hasProvider" v-bind:style="{top: positionTop + 'px'}">
             <view class="oauth-image" v-for="provider in providerList" :key="provider.value">
                 <image :src="provider.image" @tap="oauth(provider.value)"></image>
@@ -130,7 +112,8 @@
                                  * 实际开发中，获取用户信息后，需要将信息上报至服务端。
                                  * 服务端可以用 userInfo.openId 作为用户的唯一标识新增或绑定用户信息。
                                  */
-                                this.toMain(infoRes.userInfo.nickName);
+								console.log(infoRes.userInfo);
+                                this.toMain(infoRes.userInfo.nickName,infoRes.userInfo.avatarUrl);
                             }
                         });
                     },
@@ -139,8 +122,8 @@
                     }
                 });
             },
-            toMain(userName) {
-                this.login(userName);
+            toMain(userName,userAvatar) {
+                this.login(userName,userAvatar);
                 /**
                  * 强制登录时使用reLaunch方式跳转过来
                  * 返回首页也使用reLaunch方式
