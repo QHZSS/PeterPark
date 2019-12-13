@@ -1,184 +1,135 @@
 <template>
-    <view class="content">
-        <view class="oauth-row" v-if="hasProvider" v-bind:style="{top: positionTop + 'px'}">
-            <view class="oauth-image" v-for="provider in providerList" :key="provider.value">
-                <image :src="provider.image" @tap="oauth(provider.value)"></image>
-            </view>
-        </view>
-    </view>
+	<view>
+		<!-- #ifdef MP-WEIXIN -->
+		<view v-if="isCanUse">
+			<view>
+				<view class='header'>
+					<image src='../../static/img/weixin.png'></image>
+				</view>
+				<view class='content'>
+					<view>申请获取以下权限</view>
+					<text>获得你的公开信息(昵称，头像、地区等)</text>
+				</view>
+
+				<button class='bottom' type='primary' open-type="getUserInfo" withCredentials="true" lang="zh_CN" @getuserinfo="wxGetUserInfo">
+					授权登录
+				</button>
+			</view>
+		</view>
+		<!-- #endif -->
+	</view>
 </template>
 
 <script>
-    import service from '../../service.js';
-    import {
-        mapState,
-        mapMutations
-    } from 'vuex'
-    import mInput from '../../components/m-input.vue'
+	import service from '../../service.js';
+	import {
+		mapState,
+		mapMutations
+	} from 'vuex'
+	import mInput from '../../components/m-input.vue'
 
-    export default {
-        components: {
-            mInput
-        },
-        data() {
-            return {
-                providerList: [],
-                hasProvider: false,
-                account: '',
-                password: '',
-                positionTop: 0
-            }
-        },
-        computed: mapState(['forcedLogin']),
-        methods: {
-            ...mapMutations(['login']),
-            initProvider() {
-                const filters = ['weixin', 'qq', 'sinaweibo'];
-                uni.getProvider({
-                    service: 'oauth',
-                    success: (res) => {
-                        if (res.provider && res.provider.length) {
-                            for (let i = 0; i < res.provider.length; i++) {
-                                if (~filters.indexOf(res.provider[i])) {
-                                    this.providerList.push({
-                                        value: res.provider[i],
-                                        image: '../../static/img/' + res.provider[i] + '.png'
-                                    });
-                                }
-                            }
-                            this.hasProvider = true;
-                        }
-                    },
-                    fail: (err) => {
-                        console.error('获取服务供应商失败：' + JSON.stringify(err));
-                    }
-                });
-            },
-            initPosition() {
-                /**
-                 * 使用 absolute 定位，并且设置 bottom 值进行定位。软键盘弹出时，底部会因为窗口变化而被顶上来。
-                 * 反向使用 top 进行定位，可以避免此问题。
-                 */
-                this.positionTop = uni.getSystemInfoSync().windowHeight - 100;
-            },
-            bindLogin() {
-                /**
-                 * 客户端对账号信息进行一些必要的校验。
-                 * 实际开发中，根据业务需要进行处理，这里仅做示例。
-                 */
-                if (this.account.length < 5) {
-                    uni.showToast({
-                        icon: 'none',
-                        title: '账号最短为 5 个字符'
-                    });
-                    return;
-                }
-                if (this.password.length < 6) {
-                    uni.showToast({
-                        icon: 'none',
-                        title: '密码最短为 6 个字符'
-                    });
-                    return;
-                }
-                /**
-                 * 下面简单模拟下服务端的处理
-                 * 检测用户账号密码是否在已注册的用户列表中
-                 * 实际开发中，使用 uni.request 将账号信息发送至服务端，客户端在回调函数中获取结果信息。
-                 */
-                const data = {
-                    account: this.account,
-                    password: this.password
-                };
-                const validUser = service.getUsers().some(function (user) {
-                    return data.account === user.account && data.password === user.password;
-                });
-                if (validUser) {
-                    this.toMain(this.account);
-                } else {
-                    uni.showToast({
-                        icon: 'none',
-                        title: '用户账号或密码不正确',
-                    });
-                }
-            },
-            oauth(value) {
-                uni.login({
-                    provider: value,
-                    success: (res) => {
-                        uni.getUserInfo({
-                            provider: value,
-                            success: (infoRes) => {
-                                /**
-                                 * 实际开发中，获取用户信息后，需要将信息上报至服务端。
-                                 * 服务端可以用 userInfo.openId 作为用户的唯一标识新增或绑定用户信息。
-                                 */
-								console.log(infoRes.userInfo);
-                                this.toMain(infoRes.userInfo.nickName,infoRes.userInfo.avatarUrl);
-                            }
-                        });
-                    },
-                    fail: (err) => {
-                        console.error('授权登录失败：' + JSON.stringify(err));
-                    }
-                });
-            },
-            toMain(userName,userAvatar) {
-                this.login(userName,userAvatar);
-                /**
-                 * 强制登录时使用reLaunch方式跳转过来
-                 * 返回首页也使用reLaunch方式
-                 */
-                if (this.forcedLogin) {
-                    uni.reLaunch({
-                        url: '../main/main',
-                    });
-                } else {
-                    uni.navigateBack();
-                }
+	export default {
+		components: {
+			mInput
+		},
+		data() {
+			return {
+				nickName: null,
+				avatarUrl: null,
+			}
+		},
+		computed: mapState(['forcedLogin']),
+		methods: {
+			...mapMutations(['login']),
+			wxGetUserInfo() {
+				uni.getUserInfo({
+					provider: 'weixin',
+					success: function(infoRes) {
+						let nickName = infoRes.userInfo.nickName; //昵称
+						let avatarUrl = infoRes.userInfo.avatarUrl; //头像
+					},
+					fail(res) {}
+				});
+			},
+			Autho() {
+				let _this = this;
+				uni.showLoading({
+					title: '登录中...'
+				});
+				uni.login({
+					provider: 'weixin',
+					success: function(loginRes) {
+						uni.getUserInfo({
+							provider: 'weixin',
+							success: function(infoRes) {
+								uni.hideLoading();
+								let userInfoSet={
+									userName:infoRes.userInfo.nickName,
+									userAvatar:infoRes.userInfo.avatarUrl
+								}
+								_this.toMain(userInfoSet);
+								
+							}
+						});
+					},
+				});
+			},
+			toMain(userInfoSet) {
+				this.login(userInfoSet);
+				/**
+				 * 强制登录时使用reLaunch方式跳转过来
+				 * 返回首页也使用reLaunch方式
+				 */
+				if (this.forcedLogin) {
+					uni.reLaunch({
+						url: '../main/main',
+					});
+				} else {
+					uni.navigateBack();
+				}
 
-            }
-        },
-        onReady() {
-            this.initPosition();
-            this.initProvider();
-        }
-    }
+			}
+		},
+		onLoad() {
+			this.Autho();
+		}
+	}
 </script>
 
 <style>
-    .action-row {
-        display: flex;
-        flex-direction: row;
-        justify-content: center;
-    }
+	.action-row {
+		display: flex;
+		flex-direction: row;
+		justify-content: center;
+	}
 
-    .action-row navigator {
-        color: #007aff;
-        padding: 0 20upx;
-    }
+	.action-row navigator {
+		color: #007aff;
+		padding: 0 20upx;
+	}
 
-    .oauth-row {
-        display: flex;
-        flex-direction: row;
-        justify-content: center;
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-    }
+	.oauth-row {
+		display: flex;
+		flex-direction: row;
+		justify-content: center;
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+	}
 
-    .oauth-image {
-        width: 100upx;
-        height: 100upx;
-        border: 1upx solid #dddddd;
-        border-radius: 100upx;
-        margin: 0 40upx;
-        background-color: #ffffff;
-    }
+	.oauth-image {
+		width: 100upx;
+		height: 100upx;
+		border: 1upx solid #dddddd;
+		border-radius: 100upx;
+		margin: 0 40upx;
+		background-color: #ffffff;
+	}
 
-    .oauth-image image {
-        width: 60upx;
-        height: 60upx;
-        margin: 20upx;
-    }
+	.oauth-image image {
+		width: 60upx;
+		height: 60upx;
+		margin: 20upx;
+	}
 </style>

@@ -14,10 +14,10 @@ const store = new Vuex.Store({
 		userAvatar: "",
     },
     mutations: {
-        login(state, userName,userAvatar) {
-            state.userName = userName || '新用户';
+        login(state, userInfoSet) {
+            state.userName = userInfoSet.userName || '新用户';
             state.hasLogin = true;
-			state.userAvatar=userAvatar;
+			state.userAvatar=userInfoSet.userAvatar;
         },
         logout(state) {
             state.userName = "";

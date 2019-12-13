@@ -5,7 +5,7 @@
 				您好 {{userName}}，您已成功登录。
 			</view>
 			<view class="padding">
-				<view class="cu-avatar sm round" :style="'background-image:url('+userAvatar+')'">{{userAvatar}}</view>
+				<view class="cu-avatar sm round" :style="'background-image:url('+userAvatar+')'"></view>
 			</view>
 			<view class="padding flex flex-direction">
 				<button class="cu-btn bg-grey lg" @tap="SendMsg">模拟发送停车用户信息</button>
@@ -31,18 +31,45 @@
 
 	export default {
 		computed: mapState(['forcedLogin', 'hasLogin', 'userName', 'userAvatar']),
-		mounted() {
-			uni.request({
-				url: 'http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark/Parkinglotuser/1576054318407', //仅为示例，并非真实接口地址。
-				data: {},
-				header: {
-					'custom-header': 'hello' //自定义请求头信息
-				},
-				success: (res) => {
-					console.log(res.data);
-					this.text = 'request success';
+		data() {
+			return {
+				parkingUserInfo: Object
+			}
+		},
+		watch: {
+			'parkingUserInfo.parkinglot_user_state': function(val, oldVal) {
+				if (oldVal != null) {
+					console.log('new: %s, old: %s', val, oldVal);
+					uni.showModal({
+					    title: '提示',
+					    content: '您已进入停车场',
+					});
 				}
-			});
+				
+			}
+		},
+		onShow() {
+			let count = 0;
+			if (this.hasLogin) {
+				while (count < 1000) {
+					setTimeout(() => {
+						uni.request({
+							url: 'http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark/Parkinglotuser/?Parkinglotuser.parkinglot_user_id=45', //仅为示例，并非真实接口地址。
+							data: {},
+							header: {
+								'custom-header': 'hello' //自定义请求头信息
+							},
+							success: (res) => {
+								console.log(res.data);
+								this.parkingUserInfo = res.data.Parkinglotuser[0];
+								console.log(this.parkingUserInfo.parkinglot_user_state);
+							}
+						});
+					}, count * 1000);
+					count += 1;
+				}
+
+			}
 		},
 		onLoad() {
 			if (!this.hasLogin) {
