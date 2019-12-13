@@ -62,3 +62,59 @@ postmen 发车牌信息，改user表对应车牌state,到后台
 业主
 + 出租车位
 + 查看车位状态
+
+
+
+### 关于监听器
+
+众所周知，我们要实现的功能中有很多地方需要监听后台BPM服务器的数据库中数据的变化，但是由于他这样的服务器设计导致在前端没法用其他的例如socket方法和eventSource的方法来进行监听，只能通过自己编写监听代码，在PeterParkMp/pages/main.vue中已经写了一个监听器的demo:
+
+首先，在onShow生命周期钩子中实现循环Http请求，这是目前暂时的解决方法，一秒请求一次，每次将请求得到的数据存到相应的局部变量中，这里是parkingUserInfo:
+
+```js
+data() {
+	return {
+		parkingUserInfo: Object
+	}
+},
+onShow() {
+	let count = 0;
+	if (this.hasLogin) {
+		while (count < 1000) {
+			setTimeout(() => {
+				uni.request({
+					url: 'http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark/Parkinglotuser/?Parkinglotuser.parkinglot_user_id=45',
+					data: {},
+					header: {
+						'custom-header': 'hello'
+					},
+					success: (res) => {
+						console.log(res.data);
+						this.parkingUserInfo = res.data.Parkinglotuser[0];
+						console.log(this.parkingUserInfo.parkinglot_user_state);
+					}
+				});
+			}, count * 1000);
+			count += 1;
+		}
+
+	}
+}
+```
+
+在watch函数中，监听parkingUserInfo的子属性parkinglot_user_state的数值变化，监听到state变为1，则弹出已进入停车场的提示，可进入下一步导航等操作
+
+```javascript
+watch: {
+	'parkingUserInfo.parkinglot_user_state': function(val, oldVal) {
+		if (oldVal != null && val == 1) {
+			console.log('new: %s, old: %s', val, oldVal);
+			uni.showModal({
+				title: '提示',
+				content: '您已进入停车场',
+			});
+		}
+	}
+},
+```
+
