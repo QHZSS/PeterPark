@@ -89,9 +89,7 @@ onShow() {
 						'custom-header': 'hello'
 					},
 					success: (res) => {
-						console.log(res.data);
 						this.parkingUserInfo = res.data.Parkinglotuser[0];
-						console.log(this.parkingUserInfo.parkinglot_user_state);
 					}
 				});
 			}, count * 1000);
@@ -108,7 +106,6 @@ onShow() {
 watch: {
 	'parkingUserInfo.parkinglot_user_state': function(val, oldVal) {
 		if (oldVal != null && val == 1) {
-			console.log('new: %s, old: %s', val, oldVal);
 			uni.showModal({
 				title: '提示',
 				content: '您已进入停车场',

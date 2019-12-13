@@ -39,7 +39,6 @@
 		watch: {
 			'parkingUserInfo.parkinglot_user_state': function(val, oldVal) {
 				if (oldVal != null) {
-					console.log('new: %s, old: %s', val, oldVal);
 					uni.showModal({
 					    title: '提示',
 					    content: '您已进入停车场',
@@ -60,9 +59,7 @@
 								'custom-header': 'hello' //自定义请求头信息
 							},
 							success: (res) => {
-								console.log(res.data);
 								this.parkingUserInfo = res.data.Parkinglotuser[0];
-								console.log(this.parkingUserInfo.parkinglot_user_state);
 							}
 						});
 					}, count * 1000);
