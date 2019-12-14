@@ -39,7 +39,6 @@
 			</view>
 		</scroll-view>
 	</view>
-	
 </template>
 
 <script>
