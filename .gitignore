@@ -3,6 +3,9 @@
 .idea
 .vscode
 *.suo
+*.icould
 *.ntvs*
 *.njsproj
 *.sln
+# ignore target folder
+unpackage/
