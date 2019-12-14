@@ -160,6 +160,24 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 var _vuex = __webpack_require__(/*! vuex */ 16); //
 //
 //
@@ -186,26 +204,27 @@ var _vuex = __webpack_require__(/*! vuex */ 16); //
 //
 //
 //
-var _default = { computed: (0, _vuex.mapState)(['forcedLogin', 'hasLogin', 'userName', 'userAvatar']), data: function data() {return { parkingUserInfo: Object };}, watch: { 'parkingUserInfo.parkinglot_user_state': function parkingUserInfoParkinglot_user_state(val, oldVal) {if (oldVal != null) {uni.showModal({ title: '提示', content: '您已进入停车场' });}} }, onShow: function onShow() {var _this = this;var count = 0;if (this.hasLogin) {while (count < 1000) {setTimeout(function () {
-          uni.request({
-            url: 'http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark/Parkinglotuser/?Parkinglotuser.parkinglot_user_id=45', //仅为示例，并非真实接口地址。
-            data: {},
-            header: {
-              'custom-header': 'hello' //自定义请求头信息
-            },
-            success: function success(res) {
-              _this.parkingUserInfo = res.data.Parkinglotuser[0];
-            } });
-
-        }, count * 1000);
-        count += 1;
-      }
-
-    }
-  },
-  onLoad: function onLoad() {var _this2 = this;
-    if (!this.hasLogin) {
-      uni.showModal({
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+var _default = { computed: (0, _vuex.mapState)(['forcedLogin', 'hasLogin', 'userName', 'userAvatar']), data: function data() {return { parkingUserInfo: Object, modalName: null };}, watch: { 'parkingUserInfo.parkinglot_user_state': function parkingUserInfoParkinglot_user_state(val, oldVal) {if (oldVal != null) {uni.showModal({ title: '提示', content: '您已进入停车场' });}} }, onShow: function onShow() {var _this = this;var count = 0;if (this.hasLogin) {while (count < 1000) {setTimeout(function () {uni.request({ url: 'http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark/Parkinglotuser/?Parkinglotuser.parkinglot_user_id=45', //仅为示例，并非真实接口地址。
+            data: {}, header: { 'custom-header': 'hello' //自定义请求头信息
+            }, success: function success(res) {_this.parkingUserInfo = res.data.Parkinglotuser[0];} });}, count * 1000);count += 1;}}}, onLoad: function onLoad() {var _this2 = this;if (!this.hasLogin) {uni.showModal({
         title: '未登录',
         content: '您未登录，需要登录后才能继续',
         /**
@@ -230,7 +249,18 @@ var _default = { computed: (0, _vuex.mapState)(['forcedLogin', 'hasLogin', 'user
         } });
 
     }
-  } };exports.default = _default;
+  },
+  methods: {
+    showModal: function showModal(e) {
+      this.modalName = e.currentTarget.dataset.target;
+    },
+    hideModal: function hideModal(e) {
+      this.modalName = null;
+    },
+    tabSelect: function tabSelect(e) {
+      this.TabCur = e.currentTarget.dataset.id;
+      this.scrollLeft = (e.currentTarget.dataset.id - 1) * 60;
+    } } };exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 1)["default"]))
 
 /***/ }),
