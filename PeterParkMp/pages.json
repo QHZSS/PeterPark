@@ -3,7 +3,7 @@
 		{
 			"path": "pages/main/main",
 			"style": {
-				"navigationBarTitleText": "登录模板"
+				"navigationBarTitleText": "首页"
 			}
 		}, {
 			"path": "pages/login/login",
@@ -14,6 +14,16 @@
 			"path": "pages/user/user",
 			"style": {
 				"navigationBarTitleText": "我的"
+			}
+		}, {
+			"path": "pages/navigation/navigation",
+			"style": {
+				"navigationBarTitleText": "导航"
+			}
+		}, {
+			"path": "pages/rent/rent",
+			"style": {
+				"navigationBarTitleText": "车位出租"
 			}
 		}
 	],
@@ -26,6 +36,16 @@
 			"text": "首页",
 			"iconPath": "static/img/home.png",
 			"selectedIconPath": "static/img/homeHL.png"
+		}, {
+			"pagePath": "pages/navigation/navigation",
+			"text": "导航",
+			"iconPath": "static/img/naviga.png",
+			"selectedIconPath": "static/img/navigaHL.png"
+		},{
+			"pagePath": "pages/rent/rent",
+			"text": "车位出租",
+			"iconPath": "static/img/naviga.png",
+			"selectedIconPath": "static/img/navigaHL.png"
 		}, {
 			"pagePath": "pages/user/user",
 			"text": "我的",

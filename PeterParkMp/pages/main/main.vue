@@ -4,14 +4,11 @@
 			<view class="content">
 				<view v-if="hasLogin" class="hello">
 					<view class="title">
-						您好 {{userName}}，您已成功登录。
+						您好 {{userName}}，您已成功登录，欢迎使用PeterPark小程序。
+						请点击头像进入菜单
 					</view>
 					<view class="padding">
-						<view class="cu-avatar sm round" :style="'background-image:url('+userAvatar+')'" @tap="showModal" data-target="viewModal"></view>
-					</view>
-					<view class="padding flex flex-direction">
-						<button class="cu-btn bg-grey lg" @tap="SendMsg">模拟发送停车用户信息</button>
-						<button class="cu-btn bg-red margin-tb-sm lg">停车位租赁</button>
+						<view class="cu-avatar xl round" :style="'background-image:url('+userAvatar+')'" @tap="showModal" data-target="viewModal"></view>
 					</view>
 				</view>
 				<view v-if="!hasLogin" class="hello">
@@ -29,11 +26,10 @@
 			<text class="cuIcon-pullright"></text>
 		</view>
 		<scroll-view scroll-y class="DrawerWindow" :class="modalName=='viewModal'?'show':''">
-			<view class="cu-list menu card-menu margin-top-xl margin-bottom-xl shadow-lg">
-				<view class="cu-item arrow" v-for="(item,index) in 20" :key="index">
+			<view class="cu-list menu">
+				<view class="cu-item" v-for="(item,index) in menuList" :key="index" @tap="navigator(item.navigator)">
 					<view class="content">
-						<text class="cuIcon-github text-grey"></text>
-						<text class="text-grey">{{index +1}}</text>
+						<text class="text-black">{{item.name}}</text>
 					</view>
 				</view>
 			</view>
@@ -50,40 +46,17 @@
 		computed: mapState(['forcedLogin', 'hasLogin', 'userName', 'userAvatar']),
 		data() {
 			return {
-				parkingUserInfo: Object,
-				modalName:null
-			}
-		},
-		watch: {
-			'parkingUserInfo.parkinglot_user_state': function(val, oldVal) {
-				if (oldVal != null) {
-					uni.showModal({
-					    title: '提示',
-					    content: '您已进入停车场',
-					});
-				}
-				
-			}
-		},
-		onShow() {
-			let count = 0;
-			if (this.hasLogin) {
-				while (count < 1000) {
-					setTimeout(() => {
-						uni.request({
-							url: 'http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark/Parkinglotuser/?Parkinglotuser.parkinglot_user_id=45', //仅为示例，并非真实接口地址。
-							data: {},
-							header: {
-								'custom-header': 'hello' //自定义请求头信息
-							},
-							success: (res) => {
-								this.parkingUserInfo = res.data.Parkinglotuser[0];
-							}
-						});
-					}, count * 1000);
-					count += 1;
-				}
-
+				modalName:null,
+				menuList:[
+					{
+						name:"停车位导航",
+						navigator:"navigation"
+					},
+					{
+						name:"停车位出租",
+						navigator:"rent"
+					}
+				]
 			}
 		},
 		onLoad() {
@@ -124,6 +97,12 @@
 			tabSelect(e) {
 				this.TabCur = e.currentTarget.dataset.id;
 				this.scrollLeft = (e.currentTarget.dataset.id - 1) * 60
+			},
+			navigator(direction){
+				uni.switchTab({
+					url:"../"+direction+"/"+direction
+				});
+				this.modalName = null
 			}
 		},
 	}
