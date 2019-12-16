@@ -6,6 +6,7 @@
 					<view class="title">
 						您好 {{userName}}，您已成功登录，欢迎使用PeterPark小程序。
 						请点击头像进入菜单
+						您的身份是{{userAuth}}
 					</view>
 					<view class="padding">
 						<view class="cu-avatar xl round" :style="'background-image:url('+userAvatar+')'" @tap="showModal" data-target="viewModal"></view>
@@ -27,9 +28,14 @@
 		</view>
 		<scroll-view scroll-y class="DrawerWindow" :class="modalName=='viewModal'?'show':''">
 			<view class="cu-list menu">
-				<view class="cu-item" v-for="(item,index) in menuList" :key="index" @tap="navigator(item.navigator)">
+				<view class="cu-item" v-for="(item1,index1) in menuList" :key="index1" @tap="navigator(item1.navigator)">
 					<view class="content">
-						<text class="text-black">{{item.name}}</text>
+						<text class="text-black">{{item1.name}}</text>
+					</view>
+				</view>
+				<view v-if="userAuth ==='parkingSpaceOwner'" class="cu-item" v-for="(item2,index1) in parkingSpaceOwnerList" :key="index2" @tap="navigator(item2.navigator)">
+					<view class="content">
+						<text class="text-black">{{item2.name}}</text>
 					</view>
 				</view>
 			</view>
@@ -52,14 +58,19 @@
 						name:"停车位导航",
 						navigator:"navigation"
 					},
+					
+				],
+				parkingSpaceOwnerList:[
 					{
 						name:"停车位出租",
 						navigator:"rent"
 					}
-				]
+				],
+				userAuth:""
 			}
 		},
-		onLoad() {
+		async onLoad() {
+			console.log("hasLogin"+this.hasLogin);
 			if (!this.hasLogin) {
 				uni.showModal({
 					title: '未登录',
@@ -78,7 +89,7 @@
 									url: '../login/login'
 								});
 							} else {
-								uni.navigateTo({
+								uni.redirectTo({
 									url: '../login/login'
 								});
 							}
@@ -86,6 +97,38 @@
 					}
 				});
 			}
+			if(this.hasLogin){
+				/**
+				 * 检测用户身份，判断是业主还是普通用户
+				 */
+			try{
+				await uni.request({
+						url:'http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark/User/?User.user_name='+this.userName, 
+						method:'GET',	
+						header: {
+							'custom-header': 'hello' //自定义请求头信息						
+						},								
+						success: (res) => {
+							console.log("从服务器取用户信息： ");
+							console.log(res.data);
+							if(res.data.Parkingspaceowner == undefined){
+								this.userAuth = "Parkinglotuser";
+							}else{
+								this.userAuth="parkingSpaceOwner";
+							}
+						
+						},
+						fail(err) {
+							console.log("err： ");
+							console.log(err);
+						}
+					});
+			}catch(e){
+				//TODO handle the exception
+				console.log(e);
+			}	
+			}
+
 		},
 		methods: {
 			showModal(e) {
