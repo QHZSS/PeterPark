@@ -85,9 +85,7 @@
 						url: '../main/main',
 					});
 				} else {
-					uni.reLaunch({
-						url: '../main/main',
-					});
+					uni.navigateBack();
 				}
 
 			}

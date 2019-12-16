@@ -1,6 +1,6 @@
 <template>
 	<view>
-		车位出租
+		my space state
 	</view>
 </template>
 

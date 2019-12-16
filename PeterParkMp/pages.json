@@ -26,7 +26,13 @@
 				"navigationBarTitleText": "车位出租"
 			}
 		}
-	],
+	    ,{
+            "path" : "pages/mySpaceState/mySpaceState",
+            "style" : {
+				"navigationBarTitleText": "车位状态查看"
+			}
+        }
+    ],
 	"tabBar": {
 		"color": "#7a7e83",
 		"selectedColor": "#0faeff",
@@ -39,11 +45,6 @@
 		}, {
 			"pagePath": "pages/navigation/navigation",
 			"text": "导航",
-			"iconPath": "static/img/naviga.png",
-			"selectedIconPath": "static/img/navigaHL.png"
-		},{
-			"pagePath": "pages/rent/rent",
-			"text": "车位出租",
 			"iconPath": "static/img/naviga.png",
 			"selectedIconPath": "static/img/navigaHL.png"
 		}, {

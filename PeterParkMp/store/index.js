@@ -12,17 +12,73 @@ const store = new Vuex.Store({
         hasLogin: false,
         userName: "",
 		userAvatar: "",
+		userAuth:"",
     },
     mutations: {
-        login(state, userInfoSet) {
+        async login(state, userInfoSet) {
             state.userName = userInfoSet.userName || '新用户';
             state.hasLogin = true;
 			state.userAvatar=userInfoSet.userAvatar;
+			/**
+			 * 检测用户身份，判断是业主还是普通用户
+			 * 如果用户数据不在服务器中,将用户数据添加到服务器
+			 */
+			try{await uni.request({
+						url:'http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark/User/?User.user_name='+state.userName, 
+						method:'GET',	
+						header: {
+							'custom-header': 'hello' //自定义请求头信息						
+						},								
+						success: (res) => {
+							//console.log("从服务器取用户信息： ");
+							//console.log(res);
+							if(res.data.Parkingspaceowner == undefined){
+								if(res.data.Parkinglotuser == undefined){
+									console.log("查无此用户");
+									uni.request({
+												url:"http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark/Parkinglotuser/", 
+												method:'POST',
+												data: {
+														user_name:state.userName,
+														in_black_list:0
+													},
+												header: {
+													'custom-header': 'hello', //自定义请求头信息		
+													'content-type' : 'application/json'
+												},								
+												success: (res) => {
+													//console.log("从服务器取用户信息： ");
+													//console.log(res);
+													console.log(res.data);
+												
+												},
+												fail(err) {
+													console.log("err： ");
+													console.log(err);
+												}
+											});
+								}
+								state.userAuth = "Parkinglotuser";
+							}else{
+								state.userAuth="parkingSpaceOwner";
+							}
+						
+						},
+						fail(err) {
+							console.log("err： ");
+							console.log(err);
+						}
+					});
+			}catch(e){
+				//TODO handle the exception
+				console.log("exception2: "+e);
+			}	
         },
         logout(state) {
             state.userName = "";
             state.hasLogin = false;
 			state.userAvatar="";
+			state.userAuth="";
         }
     }
 })

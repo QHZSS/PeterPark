@@ -33,7 +33,7 @@
 						<text class="text-black">{{item1.name}}</text>
 					</view>
 				</view>
-				<view v-if="userAuth ==='parkingSpaceOwner'" class="cu-item" v-for="(item2,index1) in parkingSpaceOwnerList" :key="index2" @tap="navigator(item2.navigator)">
+				<view v-if="userAuth ==='parkingSpaceOwner'" class="cu-item" v-for="(item2,index2) in parkingSpaceOwnerList" :key="index2" @tap="switchtoitem(item2.navigator)">
 					<view class="content">
 						<text class="text-black">{{item2.name}}</text>
 					</view>
@@ -49,7 +49,7 @@
 	} from 'vuex'
 
 	export default {
-		computed: mapState(['forcedLogin', 'hasLogin', 'userName', 'userAvatar']),
+		computed: mapState(['forcedLogin', 'hasLogin', 'userName', 'userAvatar',"userAuth"]),
 		data() {
 			return {
 				modalName:null,
@@ -64,9 +64,12 @@
 					{
 						name:"停车位出租",
 						navigator:"rent"
+					},
+					{
+						name:"停车位状态查看",
+						navigator:"mySpaceState"
 					}
-				],
-				userAuth:""
+				]
 			}
 		},
 		async onLoad() {
@@ -89,7 +92,7 @@
 									url: '../login/login'
 								});
 							} else {
-								uni.redirectTo({
+								uni.navigateTo({
 									url: '../login/login'
 								});
 							}
@@ -97,38 +100,6 @@
 					}
 				});
 			}
-			if(this.hasLogin){
-				/**
-				 * 检测用户身份，判断是业主还是普通用户
-				 */
-			try{
-				await uni.request({
-						url:'http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark/User/?User.user_name='+this.userName, 
-						method:'GET',	
-						header: {
-							'custom-header': 'hello' //自定义请求头信息						
-						},								
-						success: (res) => {
-							console.log("从服务器取用户信息： ");
-							console.log(res.data);
-							if(res.data.Parkingspaceowner == undefined){
-								this.userAuth = "Parkinglotuser";
-							}else{
-								this.userAuth="parkingSpaceOwner";
-							}
-						
-						},
-						fail(err) {
-							console.log("err： ");
-							console.log(err);
-						}
-					});
-			}catch(e){
-				//TODO handle the exception
-				console.log(e);
-			}	
-			}
-
 		},
 		methods: {
 			showModal(e) {
@@ -143,6 +114,12 @@
 			},
 			navigator(direction){
 				uni.switchTab({
+					url:"../"+direction+"/"+direction
+				});
+				this.modalName = null
+			},
+			switchtoitem(direction){
+				uni.redirectTo({
 					url:"../"+direction+"/"+direction
 				});
 				this.modalName = null
