@@ -13,6 +13,7 @@ const store = new Vuex.Store({
         userName: "",
 		userAvatar: "",
 		userAuth:"",
+		licensePlate:""
     },
     mutations: {
         async login(state, userInfoSet) {
@@ -30,14 +31,12 @@ const store = new Vuex.Store({
 							'custom-header': 'hello' //自定义请求头信息						
 						},								
 						success: (res) => {
-							//console.log("从服务器取用户信息： ");
-							//console.log(res);
 							if(res.data.Parkingspaceowner == undefined){
 								if(res.data.Parkinglotuser == undefined){
 									console.log("查无此用户");
 									uni.request({
 												url:"http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark/Parkinglotuser/", 
-												method:'POST',
+										 		method:'POST',
 												data: {
 														user_name:state.userName,
 														in_black_list:0
@@ -49,17 +48,33 @@ const store = new Vuex.Store({
 												success: (res) => {
 													//console.log("从服务器取用户信息： ");
 													//console.log(res);
-													console.log(res.data);
-												
+													//console.log(res.data);
+													//state.userAuth = "Parkinglotuser";
 												},
 												fail(err) {
 													console.log("err： ");
 													console.log(err);
 												}
 											});
-								}
-								state.userAuth = "Parkinglotuser";
+								}else{/**
+								 * 取车牌信息
+								 */
+									if(res.data.Parkinglotuser[0].license_plate == undefined){
+										console.log("没有车牌信息");
+									}else{
+										state.licensePlate = res.data.Parkinglotuser[0].license_plate;
+										//console.log(state.licensePlate);
+									}
+									}
+								state.userAuth = "Parkinglotuser";								
 							}else{
+								console.log(res.data.Parkingspaceowner[0]);
+								if(res.data.Parkingspaceowner[0].license_plate == undefined){
+									console.log("没有车牌信息");
+								}else{
+									state.licensePlate = res.data.Parkingspaceowner[0].license_plate;
+									//console.log(res.data.)
+								}
 								state.userAuth="parkingSpaceOwner";
 							}
 						

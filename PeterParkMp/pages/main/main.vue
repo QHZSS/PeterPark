@@ -73,7 +73,7 @@
 			}
 		},
 		async onLoad() {
-			console.log("hasLogin"+this.hasLogin);
+			//console.log("hasLogin"+this.hasLogin);
 			if (!this.hasLogin) {
 				uni.showModal({
 					title: '未登录',
