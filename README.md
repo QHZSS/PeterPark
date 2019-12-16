@@ -119,3 +119,7 @@ watch: {
 + role：parkingSpaceOwner 业主
 + parking_space_id：1 以数字表示，不带字母
 + in_black_list:0 0代表不在黑名单，1代表在黑名单
+
+#### User
+
++state: - 0：用户远离停车场或刚刚离开停车场 -1:用户在停车场道闸附近等待进入 -2:用户在停车场内 
