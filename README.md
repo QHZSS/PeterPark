@@ -132,3 +132,7 @@ watch: {
 
 #### Parkinglot
 + state 1:车位可用 0:车位不可用（未出租或有车）
+
+#### 全局变量
++ userAuth: 业主：parkingSpaceOwner 非业主：Parkinglotuser
++ licensePlate: 如果没有牌照信息就是 ""
