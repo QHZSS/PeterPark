@@ -114,4 +114,5 @@ watch: {
 	}
 },
 ```
-
+### 关于数据的约定
+role：parkingSpaceOwner 业主
