@@ -115,4 +115,7 @@ watch: {
 },
 ```
 ### 关于数据的约定
-role：parkingSpaceOwner 业主
+#### Parkingspaceowner
++ role：parkingSpaceOwner 业主
++ parking_space_id：1 以数字表示，不带字母
++ in_black_list:0 0代表不在黑名单，1代表在黑名单
