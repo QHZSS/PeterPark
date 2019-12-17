@@ -62,13 +62,10 @@
 				],
 				parkingSpaceOwnerList:[
 					{
-						name:"停车位出租",
-						navigator:"rent"
-					},
-					{
 						name:"停车位状态查看",
 						navigator:"mySpaceState"
-					}
+					},
+					
 				]
 			}
 		},

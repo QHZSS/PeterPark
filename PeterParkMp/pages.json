@@ -21,12 +21,6 @@
 				"navigationBarTitleText": "导航"
 			}
 		}, {
-			"path": "pages/rent/rent",
-			"style": {
-				"navigationBarTitleText": "车位出租"
-			}
-		}
-	    ,{
             "path" : "pages/mySpaceState/mySpaceState",
             "style" : {
 				"navigationBarTitleText": "车位状态查看"
