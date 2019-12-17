@@ -81,12 +81,13 @@
 					url:'http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark/Parkingspaceowner/'+that.id,
 					method:'PUT',
 					data:{
-						parkingspace_owner_id:userInfo.parkingspace_owner_id,
+						//parkingspace_owner_id:userInfo.parkingspace_owner_id,
 						license_plate : userInfo.license_plate,
 						parking_space_id:userInfo.parking_space_id,
 						in_black_list:userInfo.in_black_list,
 						user_name:userInfo.user_name,
-						parking_space_rent:1
+						parking_space_rent:1,
+						parkinglot_user_state:userInfo.parkinglot_user_state
 					},
 					header: {
 						'custom-header': 'hello', //自定义请求头信息
@@ -102,12 +103,13 @@
 					url:'http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark/Parkingspaceowner/'+that.id,
 					method:'PUT',
 					data:{
-						parkingspace_owner_id:userInfo.parkingspace_owner_id,
+						//parkingspace_owner_id:userInfo.parkingspace_owner_id,
 						license_plate : userInfo.license_plate,
 						parking_space_id:userInfo.parking_space_id,
 						in_black_list:userInfo.in_black_list,
 						user_name:userInfo.user_name,
-						parking_space_rent:0
+						parking_space_rent:0,
+						parkinglot_user_state:userInfo.parkinglot_user_state
 					},
 					header: {
 						'custom-header': 'hello', //自定义请求头信息

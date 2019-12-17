@@ -66,7 +66,9 @@
 						navigator:"mySpaceState"
 					},
 					
-				]
+				],
+				parkingUserInfo: {}
+				
 			}
 		},
 		async onLoad() {
@@ -96,6 +98,51 @@
 						}
 					}
 				});
+			}
+		},
+		onShow() {
+			let count = 0;
+			let that = this;
+				if (this.hasLogin) {
+					while (count < 1000) {
+						setTimeout(() => {
+							uni.request({
+								url: 'http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark/User/?User.user_name='+that.userName,
+								data: {},
+								header: {
+									'custom-header': 'hello'
+								},
+								success: (res) => {
+									if(that.userAuth == 'Parkinglotuser'){
+										that.parkingUserInfo = res.data.Parkinglotuser[0];
+									}else{
+										that.parkingUserInfo = res.data.Parkingspaceowner[0];
+									}
+									
+								}
+							});
+						}, count * 1000);
+						count += 1;
+					}
+			
+				}
+		},
+		watch: {
+			'parkingUserInfo.parkinglot_user_state': function(val, oldVal) {
+				if (oldVal != null && val == 1) {
+					if(this.parkingUserInfo.in_black_list ==0){
+						uni.showModal({
+							title: '提示',
+							content: '欢迎您进入PeterPark',
+						});
+					}else{
+						uni.showModal({
+							title: '提示',
+							content: '对不起，您在黑名单中，不能进入PeterPark',
+						});
+					}
+					
+				}
 			}
 		},
 		methods: {
