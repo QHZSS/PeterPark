@@ -62,7 +62,7 @@
 					{
 						name:"停车位导航",
 						navigator:"navigation"
-					},
+					}
 					
 				],
 				parkingList:[
@@ -72,7 +72,7 @@
 					},{
 						name:"支付（之后需要从drawer删除）",
 						navigator:"pay"
-					},
+					}
 					
 				],
 				parkingSpaceOwnerList:[
