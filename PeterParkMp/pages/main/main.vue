@@ -117,7 +117,6 @@
 			}
 		},
 		onShow() {
-<<<<<<< HEAD
 			let count = 0;
 			let that = this;
 				if (this.hasLogin) {
@@ -136,35 +135,12 @@
 									}else{
 										that.user_state = res.data.Parkingspaceowner[0].parkingspace_owner_state;
 										that.parkingUserInfo = res.data.Parkingspaceowner[0];
+									}},
+									});
+									});
 									}
-=======
-			// let count = 0;
-			// let that = this;
-			// 	if (this.hasLogin) {
-			// 		while (count < 1000) {
-			// 			setTimeout(() => {
-			// 				uni.request({
-			// 					url: 'http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark/User/?User.user_name='+that.userName,
-			// 					data: {},
-			// 					header: {
-			// 						'custom-header': 'hello'
-			// 					},
-			// 					success: (res) => {
-			// 						if(that.userAuth == 'Parkinglotuser'){
-			// 							that.parkingUserInfo = res.data.Parkinglotuser[0];
-			// 						}else{
-			// 							that.parkingUserInfo = res.data.Parkingspaceowner[0];
-			// 						}
->>>>>>> 29e73c046c670f03d8249189386b73b28ccf9fd5
-									
-			// 					}
-			// 				});
-			// 			}, count * 1000);
-			// 			count += 1;
-			// 		}
-			
-			// 	}
-		},
+
+		}},
 		watch: {
 			'user_state': async function(val, oldVal) {
 				let that = this;
