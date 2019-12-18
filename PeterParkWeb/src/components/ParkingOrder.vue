@@ -1,7 +1,7 @@
 <template>
   <div id="table">
     <div class="add">
-      <input type="text" v-model="addDetail.user_name" name="user_name" value="" placeholder="用户名" />
+      <input type="text" v-model="addDetail.parking_user_name" name="parking_user_name" value="" placeholder="用户名" />
       <input type="text" v-model="addDetail.parking_space_id" name="parking_space_id" value="" placeholder="停车位ID" />
       <input type="text" v-model="addDetail.start_time" name="start_time" value="" placeholder="开始时间" />
       <input type="text" v-model="addDetail.end_time" name="end_time" value="" placeholder="结束时间" />
@@ -26,7 +26,7 @@
       <tbody>
       <tr v-for="(item,index) in newsList" :key='index'>
         <td >{{item.id}}</td>
-        <td>{{item.user_name}}</td>
+        <td>{{item.parking_user_name}}</td>
         <td >{{item.parking_space_id}}</td>
         <td>{{item.start_time}}</td>
         <td>{{item.end_time}}</td>
@@ -45,12 +45,12 @@
 				</span>
         </div>
         <div class="content">
-          <input type="text" v-model="editDetail.user_name" name="user_name" value="" placeholder="user_name" />
-          <input type="text" v-model="editDetail.parking_space_id" name="parking_space_id" value="" placeholder="parking_space_id" />
-          <input type="text" v-model="editDetail.start_time" name="start_time" value="" placeholder="start_time" />
-          <input type="text" v-model="editDetail.end_time" name="end_time" value="" placeholder="end_time" />
-          <input type="text" v-model="editDetail.order_state" name="order_state" value="" placeholder="order_state" />
-          <input type="text" v-model="editDetail.order_fee" name="order_fee" value="" placeholder="order_fee" />
+          <input type="text" v-model="editDetail.parking_user_name" name="parking_user_name" value="" placeholder="用户名" />
+          <input type="text" v-model="editDetail.parking_space_id" name="parking_space_id" value="" placeholder="停车位ID" />
+          <input type="text" v-model="editDetail.start_time" name="start_time" value="" placeholder="开始时间" />
+          <input type="text" v-model="editDetail.end_time" name="end_time" value="" placeholder="结束时间" />
+          <input type="text" v-model="editDetail.order_state" name="order_state" value="" placeholder="订单状态" />
+          <input type="text" v-model="editDetail.order_fee" name="order_fee" value="" placeholder="订单费用" />
           <button @click="update">更新</button>
           <button @click="editlist=false">取消</button>
         </div>
@@ -64,6 +64,7 @@
   import axios from 'axios'
   import qs from 'qs'
   import VueRouter from "vue-router"
+  import global from './Global'
 
   export default {
     name: "ParkingOrder",
@@ -73,20 +74,26 @@
         editlist: false,
         editDetail: {},
         newsList: [],
-        editid:''
+        editid:'',
       }
     },
     mounted() {
       let count = 0;
-      while(count < 100) {
+      global.MessageWatchFlag = false;
+      global.IoTMessageWatchFlag = false;
+      global.ParkingLotUserWatchFlag = false;
+      global.ParkingOrderWatchFlag = true;
+      global.ParkingSpaceWatchFlag = false;
+      global.ParkingSpaceOwnerWatchFlag = false;
+      while((count < 100)) {
         setTimeout(() =>{
+          if(global.ParkingOrderWatchFlag){
           axios
             .get('http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark/Parkingorder/')
             .then(response => {
               this.newsList = response.data.Parkingorder;
-              console.log("Hello");
             })
-        }, count * 5000);
+        }}, count * 5000);
         count++;
       }
     },
@@ -96,7 +103,7 @@
         //这里的思路应该是把this.addDetail传给服务端，然后加载列表this.newsList
         //this.newsList.push(this.addDetail);
         this.newsList.push({
-          user_name: this.addDetail.user_name,
+          parking_user_name: this.addDetail.parking_user_name,
           parking_space_id: this.addDetail.parking_space_id,
           start_time: this.addDetail.start_time,
           end_time: this.addDetail.end_time,
@@ -104,7 +111,7 @@
           order_fee: this.addDetail.order_fee
         });
         let json = JSON.stringify({
-          "user_name": this.addDetail.user_name,
+          "parking_user_name": this.addDetail.parking_user_name,
           "parking_space_id": parseInt(this.addDetail.parking_space_id),
           "start_time": this.addDetail.start_time,
           "end_time": this.addDetail.end_time,
@@ -144,7 +151,7 @@
       //编辑
       edit(item) {
         this.editDetail = {
-          user_name: item.user_name,
+          parking_user_name: item.parking_user_name,
           parking_space_id: item.parking_space_id,
           start_time: item.start_time,
           end_time: item.end_time,
@@ -165,7 +172,7 @@
         for (let i = 0; i < this.newsList.length; i++) {
           if (this.newsList[i].id == this.editid) {
             this.newsList[i] = {
-              user_name: this.editDetail.user_name,
+              parking_user_name: this.editDetail.parking_user_name,
               parking_space_id: this.editDetail.parking_space_id,
               start_time: this.editDetail.start_time,
               end_time: this.editDetail.end_time,
@@ -178,7 +185,7 @@
         }
 
         let json = JSON.stringify({
-          "user_name": this.editDetail.user_name,
+          "parking_user_name": this.editDetail.parking_user_name,
           "parking_space_id": parseInt(this.editDetail.parking_space_id),
           "start_time": this.editDetail.start_time,
           "end_time": this.editDetail.end_time,

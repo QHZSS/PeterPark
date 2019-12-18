@@ -42,7 +42,7 @@
 				</span>
         </div>
         <div class="content">
-          <input type="text" v-model="editDetail.license_plate" name="license_plate" value="" placeholder="license_plate" />
+          <input type="text" v-model="editDetail.license_plate" name="license_plate" value="" placeholder="车牌号码" />
           <input type="text" v-model="editDetail.message" name="message" value="" placeholder="例：欢迎光临/谢谢惠顾" />
           <button @click="update">发送</button>
           <button @click="editlist=false">取消</button>
@@ -57,6 +57,7 @@
   import axios from 'axios'
   import qs from 'qs'
   import VueRouter from "vue-router"
+  import global from './Global'
 
   export default {
     name: "IoTMessage",
@@ -67,13 +68,20 @@
         editDetail: {},
         newsList: [],
         newsListForUser: [],
-        editid:''
+        editid:'',
       }
     },
     mounted() {
       let count = 0;
-      while(count < 100 ) {
+      global.MessageWatchFlag = false;
+      global.IoTMessageWatchFlag = true;
+      global.ParkingLotUserWatchFlag = false;
+      global.ParkingOrderWatchFlag = false;
+      global.ParkingSpaceWatchFlag = false;
+      global.ParkingSpaceOwnerWatchFlag = false;
+      while((count < 100)) {
         setTimeout(()=>{
+          if(global.IoTMessageWatchFlag){
         axios
           .get('http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark/Iotmessage/')
           .then(response => {
@@ -209,7 +217,7 @@
               }
             }
 
-          })}, count*5000);
+          })}}, count*5000);
         count++;
       }
     },

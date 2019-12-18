@@ -1,7 +1,7 @@
 <template>
   <div id="table">
     <div class="add">
-      <input type="text" v-model="addDetail.parkinglot_user_name" name="parkinglot_user_name" value="" placeholder="用户名" />
+      <input type="text" v-model="addDetail.user_name" name="user_name" value="" placeholder="用户名" />
       <input type="text" v-model="addDetail.license_plate" name="license_plate" value="" placeholder="车牌号码" />
       <input type="text" v-model="addDetail.in_black_list" name="in_black_list" value="" placeholder="是否为黑名单用户" />
       <input type="text" v-model="addDetail.parkinglot_user_state" name="parkinglot_user_state" value="" placeholder="用户状态" />
@@ -22,7 +22,7 @@
       <tbody>
       <tr v-for="(item,index) in newsList" :key='index'>
         <td >{{item.id}}</td>
-        <td>{{item.parkinglot_user_name}}</td>
+        <td>{{item.user_name}}</td>
         <td>{{item.license_plate}}</td>
         <td >{{item.in_black_list == 0 ? "否" : "是"}}</td>
         <td v-if="item.parkinglot_user_state == 0">用户不在停车场内</td><td v-else-if="item.parkinglot_user_state == 1">用户在停车场入口道闸处</td><td v-else-if="item.parkinglot_user_state == 2">用户已进入停车场</td><td v-else>用户已停车</td>
@@ -39,10 +39,10 @@
 				</span>
         </div>
         <div class="content">
-          <input type="text" v-model="editDetail.parkinglot_user_name" name="parkinglot_user_name" value="" placeholder="parkinglot_user_name" />
-          <input type="text" v-model="editDetail.license_plate" name="license_plate" value="" placeholder="license_plate" />
-          <input type="text" v-model="editDetail.in_black_list" name="in_black_list" value="" placeholder="in_black_list" />
-          <input type="text" v-model="editDetail.parkinglot_user_state" name="parkinglot_user_state" value="" placeholder="parkinglot_user_state" />
+          <input type="text" v-model="editDetail.user_name" name="user_name" value="" placeholder="用户名" />
+          <input type="text" v-model="editDetail.license_plate" name="license_plate" value="" placeholder="车牌号码" />
+          <input type="text" v-model="editDetail.in_black_list" name="in_black_list" value="" placeholder="是否为黑名单用户" />
+          <input type="text" v-model="editDetail.parkinglot_user_state" name="parkinglot_user_state" value="" placeholder="用户状态" />
           <button @click="update">更新</button>
           <button @click="editlist=false">取消</button>
         </div>
@@ -56,6 +56,7 @@
   import axios from 'axios'
   import qs from 'qs'
   import VueRouter from "vue-router"
+  import global from './Global'
 
   export default {
     name: "ParkingLotUser",
@@ -65,20 +66,26 @@
         editlist: false,
         editDetail: {},
         newsList: [],
-        editid:''
+        editid:'',
       }
     },
     mounted() {
       let count = 0;
-      while(count < 100) {
+      global.MessageWatchFlag = false;
+      global.IoTMessageWatchFlag = false;
+      global.ParkingLotUserWatchFlag = true;
+      global.ParkingOrderWatchFlag = false;
+      global.ParkingSpaceWatchFlag = false;
+      global.ParkingSpaceOwnerWatchFlag = false;
+      while((count < 100)) {
         setTimeout(() =>{
+          if(global.ParkingLotUserWatchFlag){
           axios
             .get('http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark/Parkinglotuser/')
             .then(response => {
               this.newsList = response.data.Parkinglotuser;
-              console.log("Hello");
             })
-        }, count * 5000);
+        }}, count * 5000);
         count++;
       }
     },
@@ -88,7 +95,7 @@
         //这里的思路应该是把this.addDetail传给服务端，然后加载列表this.newsList
         //this.newsList.push(this.addDetail)
         this.newsList.push({
-          parkinglot_user_name: this.addDetail.parkinglot_user_name,
+          user_name: this.addDetail.user_name,
           license_plate: this.addDetail.license_plate,
           in_black_list: this.addDetail.in_black_list,
           parkinglot_user_state: this.addDetail.parkinglot_user_state,
@@ -97,7 +104,7 @@
           //dates: this.addDetail.dates,
         });
         let json = JSON.stringify({
-          "parkinglot_user_name": parseInt(this.addDetail.parkinglot_user_name),
+          "user_name": parseInt(this.addDetail.user_name),
           "license_plate": this.addDetail.license_plate,
           "in_black_list": parseInt(this.addDetail.in_black_list),
           "parkinglot_user_state": parseInt(this.addDetail.parkinglot_user_state)
@@ -135,7 +142,7 @@
       //编辑
       edit(item) {
         this.editDetail = {
-          parkinglot_user_name:item.parkinglot_user_name,
+          user_name:item.user_name,
           license_plate: item.license_plate,
           in_black_list: item.in_black_list,
           parkinglot_user_state: item.parkinglot_user_state
@@ -154,7 +161,7 @@
         for (let i = 0; i < this.newsList.length; i++) {
           if (this.newsList[i].id == this.editid) {
             this.newsList[i] = {
-              parkinglot_user_name: this.editDetail.parkinglot_user_name,
+              user_name: this.editDetail.user_name,
               license_plate: this.editDetail.license_plate,
               in_black_list: this.editDetail.in_black_list,
               parkinglot_user_state: this.editDetail.parkinglot_user_state,
@@ -165,7 +172,7 @@
         }
 
         let json = JSON.stringify({
-          "parkinglot_user_name": this.editDetail.parkinglot_user_name,
+          "user_name": this.editDetail.user_name,
           "license_plate": this.editDetail.license_plate,
           "in_black_list": parseInt(this.editDetail.in_black_list),
           "parkinglot_user_state": parseInt(this.editDetail.parkinglot_user_state)

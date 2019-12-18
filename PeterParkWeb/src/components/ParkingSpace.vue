@@ -39,10 +39,10 @@
 				</span>
         </div>
         <div class="content">
-          <input type="text" v-model="editDetail.parking_space_id" name="parking_space_id" value="" placeholder="parking_space_id" />
-          <input type="text" v-model="editDetail.parking_space_location" name="parking_space_location" value="" placeholder="parking_space_location" />
-          <input type="text" v-model="editDetail.parking_space_owner" name="parking_space_owner" value="" placeholder="parking_space_owner" />
-          <input type="text" v-model="editDetail.parking_space_state" name="parking_space_state" value="" placeholder="parking_space_state" />
+          <input type="text" v-model="editDetail.parking_space_id" name="parking_space_id" value="" placeholder="停车位ID" />
+          <input type="text" v-model="editDetail.parking_space_location" name="parking_space_location" value="" placeholder="停车位位置" />
+          <input type="text" v-model="editDetail.parking_space_owner" name="parking_space_owner" value="" placeholder="停车位拥有人" />
+          <input type="text" v-model="editDetail.parking_space_state" name="parking_space_state" value="" placeholder="停车位状态" />
           <button @click="update">更新</button>
           <button @click="editlist=false">取消</button>
         </div>
@@ -56,6 +56,7 @@
   import axios from 'axios'
   import qs from 'qs'
   import VueRouter from "vue-router"
+  import global from './Global'
 
   export default {
     name: "ParkingSpace",
@@ -65,21 +66,26 @@
         editlist: false,
         editDetail: {},
         newsList: [],
-        editid:''
+        editid:'',
       }
     },
     mounted() {
       let count = 0;
-      while(count < 100) {
+      global.MessageWatchFlag = false;
+      global.IoTMessageWatchFlag = false;
+      global.ParkingLotUserWatchFlag = false;
+      global.ParkingOrderWatchFlag = false;
+      global.ParkingSpaceWatchFlag = true;
+      global.ParkingSpaceOwnerWatchFlag = false;
+      while((count < 100)) {
         setTimeout(() =>{
+          if(global.ParkingSpaceWatchFlag){
           axios
             .get('http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark/Parkingspace/')
             .then(response => {
               this.newsList = response.data.Parkingspace;
-              console.log("Hello")
-
             })
-        }, count * 5000);
+        }}, count * 5000);
         count++;
       }
     },

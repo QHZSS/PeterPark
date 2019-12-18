@@ -1,7 +1,7 @@
 <template>
   <div id="table">
     <div class="add">
-      <input type="text" v-model="addDetail.parkingspace_owner_name" name="parkingspace_owner_name" value="" placeholder="停车位拥有人用户名" />
+      <input type="text" v-model="addDetail.user_name" name="user_name" value="" placeholder="用户名" />
       <input type="text" v-model="addDetail.license_plate" name="license_plate" value="" placeholder="车牌号码" />
       <input type="text" v-model="addDetail.parking_space_id" name="parking_space_id" value="" placeholder="停车位ID" />
       <input type="text" v-model="addDetail.in_black_list" name="in_black_list" value="" placeholder="是否为黑名单用户" />
@@ -14,7 +14,7 @@
       <thead>
       <tr>
         <th>ID</th>
-        <th>停车位拥有人用户名</th>
+        <th>用户名</th>
         <th>车牌号码</th>
         <th>停车位ID</th>
         <th>是否为黑名单用户</th>
@@ -26,7 +26,7 @@
       <tbody>
       <tr v-for="(item,index) in newsList" :key='index'>
         <td >{{item.id}}</td>
-        <td>{{item.parkingspace_owner_name}}</td>
+        <td>{{item.user_name}}</td>
         <td>{{item.license_plate}}</td>
         <td >{{item.parking_space_id}}</td>
         <td>{{item.in_black_list == 0 ? "否" : "是"}}</td>
@@ -45,12 +45,12 @@
 				</span>
         </div>
         <div class="content">
-          <input type="text" v-model="editDetail.parkingspace_owner_name" name="parkingspace_owner_name" value="" placeholder="parkingspace_owner_name" />
-          <input type="text" v-model="editDetail.license_plate" name="license_plate" value="" placeholder="license_plate" />
-          <input type="text" v-model="editDetail.parking_space_id" name="parking_space_id" value="" placeholder="parking_space_id" />
-          <input type="text" v-model="editDetail.in_black_list" name="in_black_list" value="" placeholder="in_black_list" />
-          <input type="text" v-model="editDetail.parking_space_rent" name="parking_space_rent" value="" placeholder="parking_space_rent" />
-          <input type="text" v-model="editDetail.parkingspace_owner_state" name="parkingspace_owner_state" value="" placeholder="parkingspace_owner_state" />
+          <input type="text" v-model="editDetail.user_name" name="user_name" value="" placeholder="用户名" />
+          <input type="text" v-model="editDetail.license_plate" name="license_plate" value="" placeholder="车牌号码" />
+          <input type="text" v-model="editDetail.parking_space_id" name="parking_space_id" value="" placeholder="停车位ID" />
+          <input type="text" v-model="editDetail.in_black_list" name="in_black_list" value="" placeholder="是否为黑名单用户" />
+          <input type="text" v-model="editDetail.parking_space_rent" name="parking_space_rent" value="" placeholder="停车位租赁状况" />
+          <input type="text" v-model="editDetail.parkingspace_owner_state" name="parkingspace_owner_state" value="" placeholder="停车位拥有人状态" />
           <button @click="update">更新</button>
           <button @click="editlist=false">取消</button>
         </div>
@@ -64,6 +64,7 @@
   import axios from 'axios'
   import qs from 'qs'
   import VueRouter from "vue-router"
+  import global from './Global'
 
   export default {
     name: "ParkingSpaceOwner",
@@ -73,20 +74,26 @@
         editlist: false,
         editDetail: {},
         newsList: [],
-        editid:''
+        editid:'',
       }
     },
     mounted() {
       let count = 0;
-      while(count < 100) {
+      global.MessageWatchFlag = false;
+      global.IoTMessageWatchFlag = false;
+      global.ParkingLotUserWatchFlag = false;
+      global.ParkingOrderWatchFlag = false;
+      global.ParkingSpaceWatchFlag = false;
+      global.ParkingSpaceOwnerWatchFlag = true;
+      while((count < 100)) {
         setTimeout(() =>{
+          if(global.ParkingSpaceOwnerWatchFlag){
           axios
             .get('http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark/Parkingspaceowner/')
             .then(response => {
               this.newsList = response.data.Parkingspaceowner;
-              console.log("Hello");
             })
-        }, count * 5000);
+        }}, count * 5000);
         count++;
       }
     },
@@ -96,7 +103,7 @@
         //这里的思路应该是把this.addDetail传给服务端，然后加载列表this.newsList
         //this.newsList.push(this.addDetail)
         this.newsList.push({
-          parkingspace_owner_name: this.addDetail.parkingspace_owner_name,
+          user_name: this.addDetail.user_name,
           license_plate: this.addDetail.license_plate,
           parking_space_id: this.addDetail.parking_space_id,
           in_black_list: this.addDetail.in_black_list,
@@ -107,7 +114,7 @@
           //dates: this.addDetail.dates,
         });
         let json = JSON.stringify({
-          "parkingspace_owner_name": this.addDetail.parkingspace_owner_name,
+          "user_name": this.addDetail.user_name,
           "license_plate": this.addDetail.license_plate,
           "parking_space_id": parseInt(this.addDetail.parking_space_id),
           "in_black_list": parseInt(this.addDetail.in_black_list),
@@ -147,7 +154,7 @@
       //编辑
       edit(item) {
         this.editDetail = {
-          parkingspace_owner_name: item.parkingspace_owner_name,
+          user_name: item.user_name,
           license_plate: item.license_plate,
           in_black_list: item.in_black_list,
           parking_space_id: item.parking_space_id,
@@ -168,7 +175,7 @@
         for (let i = 0; i < this.newsList.length; i++) {
           if (this.newsList[i].id == this.editid) {
             this.newsList[i] = {
-              parkingspace_owner_name: this.editDetail.parkingspace_owner_name,
+              user_name: this.editDetail.user_name,
               license_plate: this.editDetail.license_plate,
               parking_space_id: this.editDetail.parking_space_id,
               in_black_list: this.editDetail.in_black_list,
@@ -181,7 +188,7 @@
         }
 
         let json = JSON.stringify({
-          "parkingspace_owner_name": this.editDetail.parkingspace_owner_name,
+          "user_name": this.editDetail.user_name,
           "license_plate": this.editDetail.license_plate,
           "parking_space_id": parseInt(this.editDetail.parking_space_id),
           "in_black_list": parseInt(this.editDetail.in_black_list),

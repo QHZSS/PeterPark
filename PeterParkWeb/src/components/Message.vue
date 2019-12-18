@@ -36,7 +36,7 @@
 				</span>
         </div>
         <div class="content">
-          <input type="text" v-model="editDetail.message" name="message" value="" placeholder="message" />
+          <input type="text" v-model="editDetail.message" name="message" value="" placeholder="消息" />
           <button @click="update">发送</button>
           <button @click="editlist=false">取消</button>
         </div>
@@ -50,6 +50,7 @@
   import axios from 'axios'
   import qs from 'qs'
   import VueRouter from "vue-router"
+  import global from './Global'
 
   export default {
     name: "Message",
@@ -59,20 +60,26 @@
         editlist: false,
         editDetail: {},
         newsList: [],
-        editid:'',
+        editid:''
       }
     },
     mounted() {
       let count = 0;
-      while(count < 100) {
+      global.MessageWatchFlag = true;
+      global.IoTMessageWatchFlag = false;
+      global.ParkingLotUserWatchFlag = false;
+      global.ParkingOrderWatchFlag = false;
+      global.ParkingSpaceWatchFlag = false;
+      global.ParkingSpaceOwnerWatchFlag = false;
+      while((count < 100)) {
         setTimeout(() =>{
+          if(global.MessageWatchFlag){
         axios
           .get('http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark/Message/')
           .then(response => {
             this.newsList = response.data.Message;
-            console.log("Hello");
           })
-      }, count * 5000);
+      }}, count * 5000);
       count++;
       }
     },
