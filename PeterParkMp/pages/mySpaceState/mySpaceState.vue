@@ -29,7 +29,9 @@
 				rentState:3,
 				spaceState:3,
 				id:0,
-				user:{}
+				user:{},
+				space_id:0,
+				parkingSpaceEntityId:0
 			}
 		},
 		async onLoad() {
@@ -43,13 +45,13 @@
 				success: (res) => {
 					console.log(res.data);
 					that.rentState = res.data.Parkingspaceowner[0].parking_space_rent;
-					let space_id = res.data.Parkingspaceowner[0].parking_space_id;
+					that.space_id = res.data.Parkingspaceowner[0].parking_space_id;
 					that.user = res.data.Parkingspaceowner[0];
 					that.id = res.data.Parkingspaceowner[0].id;
 					//console.log("rentState+"+that.rentState);
 					//console.log("id:"+id);
 					 uni.request({
-						url:'http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark/Parkingspace/?Parkingspace.parking_space_id='+space_id,
+						url:'http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark/Parkingspace/?Parkingspace.parking_space_id='+that.space_id,
 						method:'GET',
 						header: {
 							'custom-header': 'hello' //自定义请求头信息						
@@ -93,7 +95,59 @@
 						'custom-header': 'hello', //自定义请求头信息
 						'content-type' : 'application/json'
 					},
-				});
+					success: (res) => {
+							console.log("put rent state to 1 succes");
+						
+							
+						},
+						fail(err) {
+									console.log("err： ");
+									console.log(err);
+								}
+					});
+				let parkingSpaceInfo = {};
+				await uni.request({
+					url:'http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark/Parkingspace/?Parkingspace.parking_space_id='+that.space_id,
+					method:'GET',
+					header: {
+						'custom-header': 'hello', //自定义请求头信息
+						'content-type' : 'application/json'
+					},
+					success: (res) => {
+							console.log("ParkingSpaceInfo:");	
+							parkingSpaceInfo = res.data.Parkingspace[0];
+							console.log(parkingSpaceInfo);
+							that.parkingSpaceEntityId = parkingSpaceInfo.id;
+							uni.request({
+								url:'http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark/Parkingspace/'+that.parkingSpaceEntityId,
+								method:'PUT',
+								data:{
+									//parkingspace_owner_id:userInfo.parkingspace_owner_id,
+									parking_space_id : parkingSpaceInfo.parking_space_id,
+									parking_space_location:parkingSpaceInfo.parking_space_location,
+									parking_space_owner:parkingSpaceInfo.parking_space_owner,
+									parking_space_state:0
+								},
+								header: {
+									'custom-header': 'hello', //自定义请求头信息
+									'content-type' : 'application/json'
+								},
+								success: (res) => {
+										console.log("put parking space state to 0 succes");
+									
+										
+									},
+									fail(err) {
+												console.log("err： ");
+												console.log(err);
+											}
+								});
+						},
+						fail(err) {
+									console.log("err： ");
+									console.log(err);
+								}
+					});
 				this.rentState = 1;
 			},
 			async stopRent(){
@@ -115,7 +169,58 @@
 						'custom-header': 'hello', //自定义请求头信息
 						'content-type' : 'application/json'
 					},
-				});
+					success: (res) => {
+							console.log("put rent state to 0 succes");				
+						},
+						fail(err) {
+									console.log("err： ");
+									console.log(err);
+								}
+					});
+				let parkingSpaceInfo = {};
+				await uni.request({
+					url:'http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark/Parkingspace/?Parkingspace.parking_space_id='+that.space_id,
+					method:'GET',
+					header: {
+						'custom-header': 'hello', //自定义请求头信息
+						'content-type' : 'application/json'
+					},
+					success: (res) => {
+							console.log("ParkingSpaceInfo:");	
+							parkingSpaceInfo = res.data.Parkingspace[0];
+							console.log(parkingSpaceInfo);
+							that.parkingSpaceEntityId = parkingSpaceInfo.id;
+							uni.request({
+												url:'http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark/Parkingspace/'+that.parkingSpaceEntityId,
+												method:'PUT',
+												data:{
+													//parkingspace_owner_id:userInfo.parkingspace_owner_id,
+													parking_space_id : parkingSpaceInfo.parking_space_id,
+													parking_space_location:parkingSpaceInfo.parking_space_location,
+													parking_space_owner:parkingSpaceInfo.parking_space_owner,
+													parking_space_state:1
+												},
+												header: {
+													'custom-header': 'hello', //自定义请求头信息
+													'content-type' : 'application/json'
+												},
+												success: (res) => {
+														console.log("put parking space state to 1 succes");
+													
+														
+													},
+													fail(err) {
+																console.log("err： ");
+																console.log(err);
+															}
+												});
+						},
+						fail(err) {
+									console.log("err： ");
+									console.log(err);
+								}
+					});
+				 
 				this.rentState = 0;
 			}
 		}
