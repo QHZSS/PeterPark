@@ -134,6 +134,11 @@ watch: {
 #### Parkinglot
 + state 1:车位可用 0:车位不可用（未出租或有车）
 
+#### Iotmessage
++ iot_message_state：  0表示未读/未处理   1表示已读/已处理
+
+#### message
++ message_state： 0表示未读/未处理   1表示已读/已处理
 #### 全局变量
 + userAuth: 业主：parkingSpaceOwner 非业主：Parkinglotuser
 + licensePlate: 如果没有牌照信息就是 ""
