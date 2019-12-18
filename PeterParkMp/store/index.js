@@ -24,7 +24,8 @@ const store = new Vuex.Store({
 			 * 检测用户身份，判断是业主还是普通用户
 			 * 如果用户数据不在服务器中,将用户数据添加到服务器
 			 */
-			try{await uni.request({
+			try{
+				await uni.request({
 						url:'http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark/User/?User.user_name='+state.userName, 
 						method:'GET',	
 						header: {

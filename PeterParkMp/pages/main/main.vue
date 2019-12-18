@@ -116,66 +116,7 @@
 				});
 			}
 		},
-		onShow() {
-			let count = 0;
-			let that = this;
-				if (this.hasLogin) {
-					while (count < 1000) {
-						setTimeout(() => {
-							uni.request({
-								url: 'http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark/User/?User.user_name='+that.userName,
-								data: {},
-								header: {
-									'custom-header': 'hello'
-								},
-								success: (res) => {
-									if(that.userAuth == 'Parkinglotuser'){
-										that.user_state = res.data.Parkinglotuser[0].parkinglot_user_state;
-										that.parkingUserInfo = res.data.Parkinglotuser[0];
-									}else{
-										that.user_state = res.data.Parkingspaceowner[0].parkingspace_owner_state;
-										that.parkingUserInfo = res.data.Parkingspaceowner[0];
-									}},
-									});
-									});
-									}
-
-		}},
-		watch: {
-			'user_state': async function(val, oldVal) {
-				let that = this;
-				if (oldVal != null && val == 1) {
-					if(this.parkingUserInfo.in_black_list == 0){
-						uni.showModal({
-							title: '提示',
-							content: '欢迎您进入PeterPark',
-						});
-						//插入order
-						await uni.request({
-							url:'http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark/Parkingorder/',
-							method:'POST',
-							data:{
-								"start_time": new Date(),
-								"parking_user_name":that.parkingUserInfo.user_name
-							},
-							header: {
-								'custom-header': 'hello', //自定义请求头信息
-								'content-type' : 'application/json'
-							},
-							
-						});
-						
-					}else{
-						uni.showModal({
-							title: '提示',
-							content: '对不起，您在黑名单中，不能进入PeterPark',
-						});
-						
-					}
-					
-				}
-			}
-		},
+		
 		methods: {
 			showModal(e) {
 				this.modalName = e.currentTarget.dataset.target
