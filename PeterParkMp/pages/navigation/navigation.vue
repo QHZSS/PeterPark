@@ -21,113 +21,99 @@
 </template>
 
 <script>
-import { mapState } from 'vuex';
-export default {
-	computed: mapState(['forcedLogin', 'hasLogin', 'userName', 'userAvatar', 'userAuth']),
-	data() {
-		return {
-			parkingUserInfo: Object,
-			count: 0,
-			userState: 1,
-			map: this.map,
-			parkingSpace: {},
-			adjMatrix: [
-				//邻接矩阵
-				[0, 5, 10000, 10000, 4, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000],
-				[5, 0, 5, 10000, 10000, 4, 10000, 10000, 10000, 10000, 10000, 10000, 10000],
-				[10000, 5, 0, 5, 10000, 10000, 4, 10000, 10000, 10000, 10000, 10000, 10000],
-				[10000, 10000, 5, 0, 10000, 10000, 10000, 4, 10000, 10000, 10000, 10000, 10000],
-				[4, 10000, 10000, 10000, 0, 5, 10000, 10000, 4, 10000, 10000, 10000, 10000],
-				[10000, 4, 10000, 10000, 5, 0, 5, 10000, 10000, 4, 10000, 10000, 10000],
-				[10000, 10000, 4, 10000, 10000, 5, 0, 5, 10000, 10000, 4, 10000, 10000],
-				[10000, 10000, 10000, 4, 10000, 10000, 5, 0, 10000, 10000, 10000, 4, 10000],
-				[10000, 10000, 10000, 10000, 4, 10000, 10000, 10000, 0, 5, 10000, 10000, 10000],
-				[10000, 10000, 10000, 10000, 10000, 4, 10000, 10000, 5, 0, 5, 10000, 10000],
-				[10000, 10000, 10000, 10000, 10000, 10000, 4, 10000, 10000, 5, 0, 5, 3],
-				[10000, 10000, 10000, 10000, 10000, 10000, 10000, 4, 10000, 10000, 5, 0, 2],
-				[10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 3, 2, 0]
-			],
-			numVertexes: 13, //定点数
-			numEdges: 18, //边数
-			pathMatrix: [],
-			shortPathTable: [],
-			path: [],
-			road: this.road
-		};
-	},
-	watch: {
-		'parkingUserInfo.parkinglot_user_state': function(val, oldVal) {
-			if (oldVal == 0 && val == 1) {
-				uni.showModal({
-					title: '提示',
-					content: '您已进入停车场'
-				});
-				this.userState = 1;
-			} else if (oldVal == 0 && val == 2) {
-				uni.showModal({
-					title: '提示',
-					content: '您的账号信息在黑名单中，禁止停车'
-				});
-				this.userState = -1;
-			}
-		}
-	},
-	onShow() {
-		// if (this.hasLogin) {
-		// 	while (this.count < 1000) {
-		// 		setTimeout(() => {
-		// 			if (this.userState == 0) {
-		// 				uni.request({
-		// 					url: 'http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark/Parkinglotuser/?Parkinglotuser.parkinglot_user_id=45', //仅为示例，并非真实接口地址。
-		// 					data: {},
-		// 					header: {
-		// 						'custom-header': 'hello' //自定义请求头信息
-		// 					},
-		// 					success: (res) => {
-		// 						this.parkingUserInfo = res.data.Parkinglotuser[0];
-		// 						console.log(this.parkingUserInfo);
-		// 					}
-		// 				});
-		// 			}
-		// 		}, this.count * 1000);
-		// 		this.count += 1;
-		// 	}
-		// }
-	},
-	onLoad() {
-		uni.request({
-			url: 'http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark/Parkingspace/',
-			success: res => {
-				this.parkingSpace = res.data.Parkingspace;
-			}
-		});
-	},
-	methods: {
-		groundColor(ele) {
-			let index = ele;
-			if (index == -1) {
-				return 'black';
-			} else if (index == -2) {
-				console.log(index);
-				return 'yellow';
-			} else if (index == 0) {
-				return 'white';
-			} else if (index >= 1) {
-				if (index >= 15) {
-					index += 1;
-				}
-				if (this.parkingSpace[index - 1] == undefined) {
-					return 'white';
-				}
-				let state = this.parkingSpace[index - 1].parking_space_state;
-				if (state == '1') {
-					return 'green';
-				} else {
-					return 'red';
+	import {
+		mapState
+	} from 'vuex';
+	const mod=[
+					//邻接矩阵
+					[0, 5, 10000, 10000, 4, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000],
+					[5, 0, 5, 10000, 10000, 4, 10000, 10000, 10000, 10000, 10000, 10000, 10000],
+					[10000, 5, 0, 5, 10000, 10000, 4, 10000, 10000, 10000, 10000, 10000, 10000],
+					[10000, 10000, 5, 0, 10000, 10000, 10000, 4, 10000, 10000, 10000, 10000, 10000],
+					[4, 10000, 10000, 10000, 0, 5, 10000, 10000, 4, 10000, 10000, 10000, 10000],
+					[10000, 4, 10000, 10000, 5, 0, 5, 10000, 10000, 4, 10000, 10000, 10000],
+					[10000, 10000, 4, 10000, 10000, 5, 0, 5, 10000, 10000, 4, 10000, 10000],
+					[10000, 10000, 10000, 4, 10000, 10000, 5, 0, 10000, 10000, 10000, 4, 10000],
+					[10000, 10000, 10000, 10000, 4, 10000, 10000, 10000, 0, 5, 10000, 10000, 10000],
+					[10000, 10000, 10000, 10000, 10000, 4, 10000, 10000, 5, 0, 5, 10000, 10000],
+					[10000, 10000, 10000, 10000, 10000, 10000, 4, 10000, 10000, 5, 0, 5, 10000],
+					[10000, 10000, 10000, 10000, 10000, 10000, 10000, 4, 10000, 10000, 5, 0, 10000],
+					[10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 0]
+				];
+	export default {
+		computed: mapState(['forcedLogin', 'hasLogin', 'userName', 'userAvatar', 'userAuth']),
+		data() {
+			return {
+				parkingUserInfo: Object,
+				count: 0,
+				userState: 1,
+				map: this.map,
+				parkingSpace: {},
+				adjMatrix: [
+					//邻接矩阵
+					[0, 5, 10000, 10000, 4, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000],
+					[5, 0, 5, 10000, 10000, 4, 10000, 10000, 10000, 10000, 10000, 10000, 10000],
+					[10000, 5, 0, 5, 10000, 10000, 4, 10000, 10000, 10000, 10000, 10000, 10000],
+					[10000, 10000, 5, 0, 10000, 10000, 10000, 4, 10000, 10000, 10000, 10000, 10000],
+					[4, 10000, 10000, 10000, 0, 5, 10000, 10000, 4, 10000, 10000, 10000, 10000],
+					[10000, 4, 10000, 10000, 5, 0, 5, 10000, 10000, 4, 10000, 10000, 10000],
+					[10000, 10000, 4, 10000, 10000, 5, 0, 5, 10000, 10000, 4, 10000, 10000],
+					[10000, 10000, 10000, 4, 10000, 10000, 5, 0, 10000, 10000, 10000, 4, 10000],
+					[10000, 10000, 10000, 10000, 4, 10000, 10000, 10000, 0, 5, 10000, 10000, 10000],
+					[10000, 10000, 10000, 10000, 10000, 4, 10000, 10000, 5, 0, 5, 10000, 10000],
+					[10000, 10000, 10000, 10000, 10000, 10000, 4, 10000, 10000, 5, 0, 5, 3],
+					[10000, 10000, 10000, 10000, 10000, 10000, 10000, 4, 10000, 10000, 5, 0, 2],
+					[10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 0]
+				],
+				mod,
+				numVertexes: 13, //定点数
+				numEdges: 18, //边数
+				pathMatrix: [],
+				shortPathTable: [],
+				path: [],
+				road: this.road
+			};
+		},
+		watch: {
+			'parkingUserInfo.parkinglot_user_state': function(val, oldVal) {
+				if (oldVal == 0 && val == 1) {
+					uni.showModal({
+						title: '提示',
+						content: '您已进入停车场'
+					});
+					this.userState = 1;
+				} else if (oldVal == 0 && val == 2) {
+					uni.showModal({
+						title: '提示',
+						content: '您的账号信息在黑名单中，禁止停车'
+					});
+					this.userState = -1;
 				}
 			}
 		},
-		loadParkingSpace() {
+		onShow() {
+			// if (this.hasLogin) {
+			// 	while (this.count < 1000) {
+			// 		setTimeout(() => {
+			// 			if (this.userState == 0) {
+			// 				uni.request({
+			// 					url: 'http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark/Parkinglotuser/?Parkinglotuser.parkinglot_user_id=45', //仅为示例，并非真实接口地址。
+			// 					data: {},
+			// 					header: {
+			// 						'custom-header': 'hello' //自定义请求头信息
+			// 					},
+			// 					success: (res) => {
+			// 						this.parkingUserInfo = res.data.Parkinglotuser[0];
+			// 						console.log(this.parkingUserInfo);
+			// 					}
+			// 				});
+			// 			}
+			// 		}, this.count * 1000);
+			// 		this.count += 1;
+			// 	}
+			// }
+		},
+		onLoad() {
 			uni.request({
 				url: 'http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark/Parkingspace/',
 				success: res => {
@@ -135,94 +121,324 @@ export default {
 				}
 			});
 		},
-		getParkingSpaceId(ele) {
-			let index = ele;
-			if (index <= 0) {
-				return '';
-			}
-			if (index >= 15) {
-				index += 1;
-			}
-			if (this.parkingSpace[index - 1] == undefined) {
-				return '';
-			}
-			return index >= 16 ? this.parkingSpace[index - 1].parking_space_id - 1 : this.parkingSpace[index - 1].parking_space_id;
-		},
-		navigate(ele) {
-			for (let i = this.path.length-1; i >1; i--) {
-				let index=''+this.path[i]+this.path[i-1];
-				let blockList=this.road.find(v=>v.index==index).blockList;
-				console.log(blockList);
-				for (let j=0;j<blockList.length-1;j++) {
-					console.log(blockList[j]);
-					this.map[blockList[j][0]][blockList[j][1]]=-2;
-					console.log(this.map);
+		methods: {
+			groundColor(ele) {
+				let index = ele;
+				if (index == -1) {
+					return 'black';
+				} else if (index == -2) {
+					return 'yellow';
+				} else if (index == 0) {
+					return 'white';
+				} else if (index >= 1) {
+					if (index >= 15) {
+						index += 1;
+					}
+					if (this.parkingSpace[index - 1] == undefined) {
+						return 'white';
+					}
+					let state = this.parkingSpace[index - 1].parking_space_state;
+					if (state == '1') {
+						return 'green';
+					} else {
+						return 'red';
+					}
 				}
-				this.$forceUpdate();
-			}
-		},
-		Dijkstra() {
-			this.path = [];
-			let k, min;
-			let final = [];
-			for (let v = 0; v < this.numVertexes; v++) {
-				final[v] = 0;
-				this.shortPathTable[v] = this.adjMatrix[0][v];
-				this.pathMatrix[v] = 0;
-			}
-			this.shortPathTable[0] = 0;
-			final[0] = 1;
+			},
+			loadParkingSpace() {
+				uni.request({
+					url: 'http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark/Parkingspace/',
+					success: res => {
+						this.parkingSpace = res.data.Parkingspace;
+					}
+				});
+			},
+			getParkingSpaceId(ele) {
+				let index = ele;
+				if (index <= 0) {
+					return '';
+				}
+				if (index >= 15) {
+					index += 1;
+				}
+				if (this.parkingSpace[index - 1] == undefined) {
+					return '';
+				}
+				return index >= 16 ? this.parkingSpace[index - 1].parking_space_id - 1 : this.parkingSpace[index - 1].parking_space_id;
+			},
+			navigate(ele) {
+				for (let i = 0; i < this.map.length; i++) {
+					for (let j = 0; j < this.map[i].length; j++) {
+						if (this.map[i][j] == -2) {
+							this.map[i][j] = 0;
+						}
+					}
+				}
+				if (ele <= 0) {
+					return;
+				}
+				let index = ele - 1;
+				if (index >= 14) {
+					index++;
+				}
+				if (this.parkingSpace[index].parking_space_state == 0) {
+					return;
+				}
+				let pos = this.parkingSpace[index].parking_space_location.split(",");
+				pos[0] = parseInt(pos[0]);
+				pos[1] = parseInt(pos[1]);
+				console.log(pos);
+				if (pos[0] >= 8 && pos[0] <= 10 && pos[1] >= 2 && pos[1] <= 6) {
+					this.adjMatrix=JSON.parse(JSON.stringify(this.mod));
+					this.adjMatrix[0][12] = pos[1] - 1;
+					this.adjMatrix[0][1] = 10000;
+					this.adjMatrix[1][12] = 6 - pos[1];
+					this.adjMatrix[1][0] = 10000;
+					this.adjMatrix[12] = [pos[1] - 1, 5 - pos[1], 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000,
+						0
+					];
+					let blockList1 = this.road[0].blockList.slice(0, pos[1] + 1);
+					let blockList2 = this.road[0].blockList.slice(pos[1]);
+					this.road[16] = {
+						index: "0x",
+						blockList: blockList1
+					};
+					this.road[17] = {
+						index: "1x",
+						blockList: blockList2
+					};
+				} else if (pos[0] >= 8 && pos[0] <= 10 && pos[1] >= 7 && pos[1] <= 11) {
+					this.adjMatrix=JSON.parse(JSON.stringify(this.mod));
+					this.adjMatrix[1][12] = pos[1] - 6;
+					this.adjMatrix[1][2] = 10000;
+					this.adjMatrix[2][12] = 11 - pos[1];
+					this.adjMatrix[2][1] = 10000;
+					this.adjMatrix[12] = [10000, pos[1] - 6, 11 - pos[1], 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000,
+						10000, 0
+					];
+					let blockList1 = this.road[1].blockList.slice(0, pos[1] - 4);
+					let blockList2 = this.road[1].blockList.slice(pos[1] - 5);
+					this.road[16] = {
+						index: "1x",
+						blockList: blockList1
+					};
+					this.road[17] = {
+						index: "2x",
+						blockList: blockList2
+					};
+				} else if (pos[0] >= 8 && pos[0] <= 10 && pos[1] >= 12 && pos[1] <= 15) {
+					this.adjMatrix=JSON.parse(JSON.stringify(this.mod));
+					this.adjMatrix[2][12] = pos[1] - 11;
+					this.adjMatrix[2][3] = 10000;
+					this.adjMatrix[3][12] = 16 - pos[1];
+					this.adjMatrix[3][2] = 10000;
+					this.adjMatrix[12] = [10000,10000, pos[1] - 11, 16 - pos[1], 10000, 10000, 10000, 10000, 10000, 10000, 10000,
+						10000, 0
+					];
+					let blockList1 = this.road[2].blockList.slice(0, pos[1] - 9);
+					let blockList2 = this.road[2].blockList.slice(pos[1] - 10);
+					this.road[16] = {
+						index: "2x",
+						blockList: blockList1
+					};
+					this.road[17] = {
+						index: "3x",
+						blockList: blockList2
+					};
+				}else if (pos[0] >= 4 && pos[0] <= 6 && pos[1] >= 2 && pos[1] <= 5) {
+					this.adjMatrix=JSON.parse(JSON.stringify(this.mod));
+					this.adjMatrix[4][12] = pos[1] - 1;
+					this.adjMatrix[4][5] = 10000;
+					this.adjMatrix[5][12] = 6 - pos[1];
+					this.adjMatrix[5][4] = 10000;
+					this.adjMatrix[12] = [10000,10000,10000,10000, pos[1] - 1, 6 - pos[1], 10000, 10000, 10000, 10000, 10000, 10000,
+						10000, 0
+					];
+					let blockList1 = this.road[3].blockList.slice(0, pos[1] +1);
+					let blockList2 = this.road[3].blockList.slice(pos[1]);
+					this.road[16] = {
+						index: "4x",
+						blockList: blockList1
+					};
+					this.road[17] = {
+						index: "5x",
+						blockList: blockList2
+					};
+				}else if (pos[0] >= 4 && pos[0] <= 6 && pos[1] >= 7 && pos[1] <= 10) {
+					this.adjMatrix=JSON.parse(JSON.stringify(this.mod));
+					this.adjMatrix[5][12] = pos[1] - 6;
+					this.adjMatrix[5][6] = 10000;
+					this.adjMatrix[6][12] = 11 - pos[1];
+					this.adjMatrix[6][5] = 10000;
+					this.adjMatrix[12] = [10000,10000,10000,10000,10000, pos[1] - 6, 11 - pos[1], 10000, 10000, 10000, 10000, 10000,
+						10000, 0
+					];
+					let blockList1 = this.road[4].blockList.slice(0, pos[1] -4);
+					let blockList2 = this.road[4].blockList.slice(pos[1]-5);
+					this.road[16] = {
+						index: "5x",
+						blockList: blockList1
+					};
+					this.road[17] = {
+						index: "6x",
+						blockList: blockList2
+					};
+				}else if (pos[0] >= 4 && pos[0] <= 6 && pos[1] >= 12 && pos[1] <= 15) {
+					this.adjMatrix=JSON.parse(JSON.stringify(this.mod));
+					this.adjMatrix[6][12] = pos[1] - 11;
+					this.adjMatrix[6][7] = 10000;
+					this.adjMatrix[7][12] = 16 - pos[1];
+					this.adjMatrix[7][6] = 10000;
+					this.adjMatrix[12] = [10000,10000,10000,10000,10000,10000, pos[1] - 11, 16 - pos[1], 10000, 10000, 10000, 10000,
+						10000, 0
+					];
+					let blockList1 = this.road[5].blockList.slice(0, pos[1] -9);
+					let blockList2 = this.road[5].blockList.slice(pos[1]-10);
+					this.road[16] = {
+						index: "6x",
+						blockList: blockList1
+					};
+					this.road[17] = {
+						index: "7x",
+						blockList: blockList2
+					};
+				}else if (pos[0] >= 0 && pos[0] <= 2 && pos[1] >= 2 && pos[1] <= 5) {
+					this.adjMatrix=JSON.parse(JSON.stringify(this.mod));
+					this.adjMatrix[8][12] = pos[1] - 1;
+					this.adjMatrix[8][9] = 10000;
+					this.adjMatrix[9][12] = 6 - pos[1];
+					this.adjMatrix[9][8] = 10000;
+					this.adjMatrix[12] = [10000,10000,10000,10000,10000,10000,10000,10000, pos[1] - 1, 6 - pos[1], 10000, 10000,
+						10000, 0
+					];
+					let blockList1 = this.road[6].blockList.slice(0, pos[1]+1);
+					let blockList2 = this.road[6].blockList.slice(pos[1]);
+					this.road[16] = {
+						index: "8x",
+						blockList: blockList1
+					};
+					this.road[17] = {
+						index: "9x",
+						blockList: blockList2
+					};
+				}else if (pos[0] >= 0 && pos[0] <= 2 && pos[1] >= 7 && pos[1] <= 10) {
+					this.adjMatrix=JSON.parse(JSON.stringify(this.mod));
+					this.adjMatrix[9][12] = pos[1] - 6;
+					this.adjMatrix[9][10] = 10000;
+					this.adjMatrix[10][12] = 11 - pos[1];
+					this.adjMatrix[10][9] = 10000;
+					this.adjMatrix[12] = [10000,10000,10000,10000,10000,10000,10000,10000,10000, pos[1] - 1, 6 - pos[1], 10000,
+						10000, 0
+					];
+					let blockList1 = this.road[7].blockList.slice(0, pos[1]-4);
+					let blockList2 = this.road[7].blockList.slice(pos[1]-5);
+					this.road[16] = {
+						index: "9x",
+						blockList: blockList1
+					};
+					this.road[17] = {
+						index: "10x",
+						blockList: blockList2
+					};
+				}else if (pos[0] >= 0 && pos[0] <= 2 && pos[1] >= 12 && pos[1] <= 15) {
+					this.adjMatrix=JSON.parse(JSON.stringify(this.mod));
+					this.adjMatrix[10][12] = pos[1] - 11;
+					this.adjMatrix[10][11] = 10000;
+					this.adjMatrix[11][12] = 16 - pos[1];
+					this.adjMatrix[11][10] = 10000;
+					this.adjMatrix[12] = [10000,10000,10000,10000,10000,10000,10000,10000,10000,10000, pos[1] - 1, 6 - pos[1],
+						10000, 0
+					];
+					let blockList1 = this.road[8].blockList.slice(0, pos[1]-9);
+					let blockList2 = this.road[8].blockList.slice(pos[1]-10);
+					this.road[16] = {
+						index: "10x",
+						blockList: blockList1
+					};
+					this.road[17] = {
+						index: "11x",
+						blockList: blockList2
+					};
+				}
+				this.Dijkstra();
+				for (let i = this.path.length - 1; i > 0; i--) {
+					let index = '' + this.path[i] + this.path[i - 1];
+					let blockList = this.road.find(v => v.index == index).blockList;
+					this.map[10][1] = -2;
+					for (let j = 0; j < blockList.length - 1; j++) {
+						this.map[blockList[j][0]][blockList[j][1]] = -2;
+					}
+					this.$forceUpdate();
+				}
+			},
+			Dijkstra() {
+				this.path = [];
+				this.shortPathTable=[];
+				this.pathMatrix=[];
+				let k, min;
+				let final = [];
+				for (let v = 0; v < this.numVertexes; v++) {
+					final[v] = 0;
+					this.shortPathTable[v] = this.adjMatrix[0][v];
+					this.pathMatrix[v] = 0;
+				}
+				this.shortPathTable[0] = 0;
+				final[0] = 1;
 
-			for (let v = 1; v < this.numVertexes; v++) {
-				//初始化数据
-				min = 10000;
-				for (let w = 0; w < this.numVertexes; w++) {
-					//寻找离V0最近的顶点
-					if (!final[w] && this.shortPathTable[w] < min) {
-						k = w;
-						min = this.shortPathTable[w]; //w 顶点离V0顶点更近
+				for (let v = 1; v < this.numVertexes; v++) {
+					//初始化数据
+					min = 10000;
+					for (let w = 0; w < this.numVertexes; w++) {
+						//寻找离V0最近的顶点
+						if (!final[w] && this.shortPathTable[w] < min) {
+							k = w;
+							min = this.shortPathTable[w]; //w 顶点离V0顶点更近
+						}
+					}
+					final[k] = 1; //将目前找到的最近的顶点置位1
+					for (let w = 0; w < this.numVertexes; w++) {
+						//修正当前最短路径及距离
+						if (!final[w] && min + this.adjMatrix[k][w] < this.shortPathTable[w]) {
+							//说明找到了更短的路径，修改Pathmatirx[w]和ShortPathTable[w]
+							this.shortPathTable[w] = min + this.adjMatrix[k][w];
+							this.pathMatrix[w] = k;
+						}
 					}
 				}
-				final[k] = 1; //将目前找到的最近的顶点置位1
-				for (let w = 0; w < this.numVertexes; w++) {
-					//修正当前最短路径及距离
-					if (!final[w] && min + this.adjMatrix[k][w] < this.shortPathTable[w]) {
-						//说明找到了更短的路径，修改Pathmatirx[w]和ShortPathTable[w]
-						this.shortPathTable[w] = min + this.adjMatrix[k][w];
-						this.pathMatrix[w] = k;
+				//打印最短路线
+				let temp = 12;
+				while (temp != 0) {
+					if (temp == 12) {
+						this.path.push("x");
+					} else {
+						this.path.push(temp);
 					}
+					temp = this.pathMatrix[temp];
 				}
+				this.path.push(0);
+				console.log(this.path);
 			}
-			//打印最短路线
-			let temp = 12;
-			while (temp != 0) {
-				this.path.push(temp);
-				temp = this.pathMatrix[temp];
-			}
-			this.path.push(0);
-			console.log(this.path);
 		}
-	}
-};
+	};
 </script>
 
 <style>
-.map {
-	display: flex;
-	flex-direction: column;
-}
+	.map {
+		display: flex;
+		flex-direction: column;
+	}
 
-.row {
-	display: flex;
-	flex-direction: row;
-}
+	.row {
+		display: flex;
+		flex-direction: row;
+	}
 
-.col {
-	flex: 1 1 40rpx;
+	.col {
+		flex: 1 1 40rpx;
 
-	height: 75rpx;
-	display: flex;
-	align-items: center;
-	justify-content: space-around;
-}
+		height: 75rpx;
+		display: flex;
+		align-items: center;
+		justify-content: space-around;
+	}
 </style>

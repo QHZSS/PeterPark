@@ -68,6 +68,12 @@ export default {
 			},{
 				index: '711',
 				blockList:[[5,16],[4,16],[3,16],[2,16],[1,16]]
+			},{
+				index: '',
+				blockList:[]
+			},{
+				index: '',
+				blockList:[]
 			}
 		];
 	},
