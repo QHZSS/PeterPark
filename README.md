@@ -138,7 +138,7 @@ watch: {
 + iot_message_state：  0表示未读/未处理   1表示已读/已处理
 
 #### message
-+ message_state： 0表示未读/未处理   1表示已读/已处理
++ message_state： 0表示系统发送给用户的消息未读/未处理   1表示系统发送给用户的消息已读/已处理  3表示该消息是用户发送给管理人员的
 #### 全局变量
 + userAuth: 业主：parkingSpaceOwner 非业主：Parkinglotuser
 + licensePlate: 如果没有牌照信息就是 ""
