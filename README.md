@@ -23,7 +23,7 @@ postmen 发车牌信息，改user表对应车牌state,到后台
 用户支付后，改order状态
 
 + 出租车位
-业主申请出租，改application表，管理员审核申请，通过改application表，parkingspace表端state，把state改成可用
+业主申请出租，parkingspace表端state，把state改成可用
 小程序端有一个页面可以看自己的车位状态
 
 + 发送问候语
@@ -129,11 +129,16 @@ watch: {
 -2:用户在停车场内 
 
 #### parking order
-+ state 1:用户正停车 2:用户离开但还未支付 3:用户已支付 0（可选）:订单开始但是用户还未停车
++ state 1:用户在车位 2:用户离开但还未支付 3:用户已支付 0（可选）:订单开始但是用户还未停车
 
 #### Parkinglot
 + state 1:车位可用 0:车位不可用（未出租或有车）
 
+#### Iotmessage
++ iot_message_state：  0表示未读/未处理   1表示已读/已处理
+
+#### message
++ message_state： 0表示未读/未处理   1表示已读/已处理
 #### 全局变量
 + userAuth: 业主：parkingSpaceOwner 非业主：Parkinglotuser
 + licensePlate: 如果没有牌照信息就是 ""
