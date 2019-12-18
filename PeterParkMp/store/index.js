@@ -13,7 +13,8 @@ const store = new Vuex.Store({
         userName: "",
 		userAvatar: "",
 		userAuth:"",
-		licensePlate:""
+		licensePlate:"",
+		orderId:0
     },
     mutations: {
         async login(state, userInfoSet) {
@@ -95,7 +96,11 @@ const store = new Vuex.Store({
             state.hasLogin = false;
 			state.userAvatar="";
 			state.userAuth="";
-        }
+			state.orderId=0;
+        },
+		updateOrderId(state,orderId){
+			state.orderId=orderId;
+		}
     }
 })
 

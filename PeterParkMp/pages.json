@@ -21,24 +21,22 @@
 				"navigationBarTitleText": "导航"
 			}
 		}, {
-            "path" : "pages/mySpaceState/mySpaceState",
-            "style" : {
+			"path": "pages/mySpaceState/mySpaceState",
+			"style": {
 				"navigationBarTitleText": "车位状态查看"
 			}
-        }
-        ,{
-            "path" : "pages/message/message",
-            "style" : {
+		}, {
+			"path": "pages/message/message",
+			"style": {
 				"navigationBarTitleText": "消息盒子"
-				}
-        }
-        ,{
-            "path" : "pages/pay/pay",
-            "style" : {
+			}
+		}, {
+			"path": "pages/pay/pay",
+			"style": {
 				"navigationBarTitleText": "支付"
 			}
-        }
-    ],
+		}
+	],
 	"tabBar": {
 		"color": "#7a7e83",
 		"selectedColor": "#0faeff",
