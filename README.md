@@ -23,7 +23,7 @@ postmen 发车牌信息，改user表对应车牌state,到后台
 用户支付后，改order状态
 
 + 出租车位
-业主申请出租，改application表，管理员审核申请，通过改application表，parkingspace表端state，把state改成可用
+业主申请出租，parkingspace表端state，把state改成可用
 小程序端有一个页面可以看自己的车位状态
 
 + 发送问候语
