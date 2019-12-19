@@ -89,7 +89,7 @@
 						in_black_list:userInfo.in_black_list,
 						user_name:userInfo.user_name,
 						parking_space_rent:1,
-						parkinglot_user_state:userInfo.parkinglot_user_state
+						parkingspace_owner_state:userInfo.parkingspace_owner_state
 					},
 					header: {
 						'custom-header': 'hello', //自定义请求头信息
@@ -163,7 +163,7 @@
 						in_black_list:userInfo.in_black_list,
 						user_name:userInfo.user_name,
 						parking_space_rent:0,
-						parkinglot_user_state:userInfo.parkinglot_user_state
+						parkingspace_owner_state:userInfo.parkingspace_owner_state
 					},
 					header: {
 						'custom-header': 'hello', //自定义请求头信息
