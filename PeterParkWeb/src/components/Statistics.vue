@@ -43,8 +43,9 @@
         dateTime: '',
         preDayTime:'',
         classPrefix: "qst-tecs-src-teacher-dean-brokenLine_",
-        yNum:['总营收（元）'],
+        yNum:['总营收（元）', '订单数量'],
         incomesList : [],
+        orderNumberList: []
       }
     },
     mounted() {
@@ -59,7 +60,7 @@
         setTimeout(() =>{
           if(global.ParkingOrderWatchFlag){
           axios
-            .get('http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark/Parkingorder/')
+            .get('http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark2/Parkingorder/')
             .then(response => {
               this.newsList = response.data.Parkingorder;
               this.dateTime = new Date();
@@ -78,22 +79,26 @@
                   income: 0
                 });
               }
+              //Should be tested again when data is enough, may exist data misalignment problem
                 for(let i = 0; i < this.newsList.length; i++){
                   if(this.newsList[i].end_time) {
                     let orderDate = this.newsList[i].end_time;
                     let j = parseInt((this.dateTime - Date.parse(orderDate)) / (24 * 60 * 60 * 1000));
-                    this.newsListForStatistics[14 - j].orderNumber++;
-                    if(this.newsList[i].order_state == 2 && this.newsList[i].order_fee) {
-                      this.newsListForStatistics[14 - j].income += this.newsList[i].order_fee
+                    this.newsListForStatistics[13 - j].orderNumber++;
+                    if(this.newsList[i].order_state == 3 && this.newsList[i].order_fee) {
+                      this.newsListForStatistics[13 - j].income += this.newsList[i].order_fee
                     }
                   }
                 }
                 this.incomesList = [];
+                this.orderNumberList = [];
                 for(let j = 0; j < this.newsListForStatistics.length; j++){
                   this.incomesList.push(this.newsListForStatistics[j].income);
+                  this.orderNumberList.push(this.newsListForStatistics[j].orderNumber)
                 }
 
                 console.log(this.incomesList);
+                console.log(this.orderNumberList);
                 //console.log(this.series);
                 let obj = this.$refs.myEchart;
                 if(obj){
@@ -145,6 +150,7 @@
           // 折线图数据
           series:[
             {name:'总营收（元）',type:'line',stack: '总营收（元）',data: this.incomesList},
+            {name:'订单数量', type:'line', stack: '订单数量',data:this.orderNumberList}
           ]
         })
       }

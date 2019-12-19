@@ -30,7 +30,7 @@
         <td >{{item.parking_space_id}}</td>
         <td>{{item.start_time}}</td>
         <td>{{item.end_time}}</td>
-        <td v-if="item.order_state == 1">订单未支付</td><td v-else-if="item.order_state == 2">订单已完成</td><td v-else>订单进行中</td>
+        <td v-if="item.order_state == 1">订单进行中</td><td v-else-if="item.order_state == 2">订单未支付</td><td v-else-if="item.order_state == 3">订单已完成</td><td v-else>订单进行中</td>
         <td>{{item.order_fee}}</td>
         <td><span @click="deletelist(item.id,index)" class="delete">删除</span><span class="edit" @click="edit(item)">编辑</span></td>
       </tr>
@@ -89,7 +89,7 @@
         setTimeout(() =>{
           if(global.ParkingOrderWatchFlag){
           axios
-            .get('http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark/Parkingorder/')
+            .get('http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark2/Parkingorder/')
             .then(response => {
               this.newsList = response.data.Parkingorder;
             })
@@ -120,11 +120,11 @@
         });
 
         axios
-          .post('http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark/Parkingorder/', json, {headers: {'Content-Type': 'application/json'}}
+          .post('http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark2/Parkingorder/', json, {headers: {'Content-Type': 'application/json'}}
           ).then((res) => {
           console.log(res);
           axios
-            .get('http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark/Parkingorder/')
+            .get('http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark2/Parkingorder/')
             .then(response => {
               this.newsList = response.data.Parkingorder
             })
@@ -134,11 +134,11 @@
       //删除
       deletelist(id, i) {
         this.newsList.splice(i, 1);
-        axios.delete('http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark/Parkingorder/' + id)
+        axios.delete('http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark2/Parkingorder/' + id)
           .then((res) => {
             console.log(res);
             axios
-              .get('http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark/Parkingorder/')
+              .get('http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark2/Parkingorder/')
               .then(response => {
                 this.newsList = response.data.Parkingorder
               })
@@ -193,7 +193,7 @@
           "order_fee": parseInt(this.editDetail.order_fee)
         });
         axios
-          .put('http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark/Parkingorder/' + this.editid, json, {headers: {'Content-Type': 'application/json'}}
+          .put('http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark2/Parkingorder/' + this.editid, json, {headers: {'Content-Type': 'application/json'}}
           ).then((res) => {
           console.log(res);
         })

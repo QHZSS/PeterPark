@@ -86,7 +86,7 @@
         setTimeout(()=>{
           if(global.IoTMessageWatchFlag){
             axios
-              .get('http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark/Iotmessage/')
+              .get('http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark2/Iotmessage/')
               .then(response => {
                 this.newsList = response.data.Iotmessage;
                   for(let i = 0; i < this.newsList.length; i++){
@@ -97,7 +97,7 @@
                         //first, update user_state to parkinglotuser table
                         //Step1, get the parkinglotuser table
                         axios
-                          .get('http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark/Parkinglotuser/')
+                          .get('http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark2/Parkinglotuser/')
                           .then(response => {
                             this.newsListForUser = response.data.Parkinglotuser;
                             console.log(this.newsListForUser);
@@ -119,7 +119,7 @@
                               console.log(json2);
                               //Step3, update user state
                               axios
-                                .put('http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark/Parkinglotuser/' + this.newsListForUser[j].id, json2, {headers: {'Content-Type': 'application/json'}}
+                                .put('http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark2/Parkinglotuser/' + this.newsListForUser[j].id, json2, {headers: {'Content-Type': 'application/json'}}
                                 ).then((res) => {
                                 console.log(res);
                                 //then, update iot_message_state to iot_message table
@@ -130,7 +130,7 @@
                                   "iot_message_state": 1
                                 });
                                 axios
-                                  .put('http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark/Iotmessage/' + this.newsList[i].id, json, {headers: {'Content-Type': 'application/json'}}
+                                  .put('http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark2/Iotmessage/' + this.newsList[i].id, json, {headers: {'Content-Type': 'application/json'}}
                                   ).then((res) => {
                                   console.log(res);
                                 })
@@ -140,7 +140,7 @@
                             else{
                               //If can not find this license_plate in parkinglot user table, then get parkingspaceowner table.
                               axios
-                                .get('http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark/Parkingspaceowner/')
+                                .get('http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark2/Parkingspaceowner/')
                                 .then(response =>{
                                   this.newsListForOwner = response.data.Parkingspaceowner;
                                   for(let j = 0; j < this.newsListForOwner.length; j++){
@@ -155,7 +155,7 @@
                                       });
                                       console.log(json2);
                                       axios
-                                        .put('http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark/Parkingspaceowner/' + this.newsListForOwner[j].id, json2, {headers: {'Content-Type': 'application/json'}}
+                                        .put('http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark2/Parkingspaceowner/' + this.newsListForOwner[j].id, json2, {headers: {'Content-Type': 'application/json'}}
                                         ).then((res) => {
                                         console.log(res);
                                         //then, update iot_message_state to iot_message table
@@ -166,7 +166,7 @@
                                           "iot_message_state": 1
                                         });
                                         axios
-                                          .put('http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark/Iotmessage/' + this.newsList[i].id, json, {headers: {'Content-Type': 'application/json'}}
+                                          .put('http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark2/Iotmessage/' + this.newsList[i].id, json, {headers: {'Content-Type': 'application/json'}}
                                           ).then((res) => {
                                           console.log(res);
                                         })
@@ -183,7 +183,7 @@
                         //first, update user_state to parkinglotuser table
                         //Step1, get the parkinglotuser table
                         axios
-                          .get('http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark/Parkinglotuser/')
+                          .get('http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark2/Parkinglotuser/')
                           .then(response => {
                             this.newsListForUser = response.data.Parkinglotuser;
                             console.log(this.newsListForUser);
@@ -205,7 +205,7 @@
                               console.log(json2);
                               //Step3, update user state
                               axios
-                                .put('http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark/Parkinglotuser/' + this.newsListForUser[j].id, json2, {headers: {'Content-Type': 'application/json'}}
+                                .put('http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark2/Parkinglotuser/' + this.newsListForUser[j].id, json2, {headers: {'Content-Type': 'application/json'}}
                                 ).then((res) => {
                                 console.log(res);
                                 //then, update iot_message_state to iot_message table
@@ -216,7 +216,7 @@
                                   "iot_message_state": 1
                                 });
                                 axios
-                                  .put('http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark/Iotmessage/' + this.newsList[i].id, json, {headers: {'Content-Type': 'application/json'}}
+                                  .put('http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark2/Iotmessage/' + this.newsList[i].id, json, {headers: {'Content-Type': 'application/json'}}
                                   ).then((res) => {
                                   console.log(res);
                                 })
@@ -226,7 +226,7 @@
                             else{
                               //If can not find this license_plate in parkinglot user table, then get parkingspaceowner table.
                               axios
-                                .get('http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark/Parkingspaceowner/')
+                                .get('http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark2/Parkingspaceowner/')
                                 .then(response =>{
                                   this.newsListForOwner = response.data.Parkingspaceowner;
                                   for(let j = 0; j < this.newsListForOwner.length; j++){
@@ -241,7 +241,7 @@
                                       });
                                       console.log(json2);
                                       axios
-                                        .put('http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark/Parkingspaceowner/' + this.newsListForOwner[j].id, json2, {headers: {'Content-Type': 'application/json'}}
+                                        .put('http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark2/Parkingspaceowner/' + this.newsListForOwner[j].id, json2, {headers: {'Content-Type': 'application/json'}}
                                         ).then((res) => {
                                         console.log(res);
                                         //then, update iot_message_state to iot_message table
@@ -252,7 +252,7 @@
                                           "iot_message_state": 1
                                         });
                                         axios
-                                          .put('http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark/Iotmessage/' + this.newsList[i].id, json, {headers: {'Content-Type': 'application/json'}}
+                                          .put('http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark2/Iotmessage/' + this.newsList[i].id, json, {headers: {'Content-Type': 'application/json'}}
                                           ).then((res) => {
                                           console.log(res);
                                         })
@@ -268,7 +268,7 @@
                         //first, update user_state to parkinglotuser table
                         //Step1, get the parkinglotuser table
                         axios
-                          .get('http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark/Parkinglotuser/')
+                          .get('http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark2/Parkinglotuser/')
                           .then(response => {
                             this.newsListForUser = response.data.Parkinglotuser;
                             console.log(this.newsListForUser);
@@ -290,7 +290,7 @@
                               console.log(json2);
                               //Step3, update user state
                               axios
-                                .put('http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark/Parkinglotuser/' + this.newsListForUser[j].id, json2, {headers: {'Content-Type': 'application/json'}}
+                                .put('http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark2/Parkinglotuser/' + this.newsListForUser[j].id, json2, {headers: {'Content-Type': 'application/json'}}
                                 ).then((res) => {
                                 console.log(res);
                                 //then, update iot_message_state to iot_message table
@@ -301,7 +301,7 @@
                                   "iot_message_state": 1
                                 });
                                 axios
-                                  .put('http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark/Iotmessage/' + this.newsList[i].id, json, {headers: {'Content-Type': 'application/json'}}
+                                  .put('http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark2/Iotmessage/' + this.newsList[i].id, json, {headers: {'Content-Type': 'application/json'}}
                                   ).then((res) => {
                                   console.log(res);
                                 })
@@ -311,7 +311,7 @@
                             else{
                               //If can not find this license_plate in parkinglot user table, then get parkingspaceowner table.
                               axios
-                                .get('http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark/Parkingspaceowner/')
+                                .get('http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark2/Parkingspaceowner/')
                                 .then(response =>{
                                   this.newsListForOwner = response.data.Parkingspaceowner;
                                   for(let j = 0; j < this.newsListForOwner.length; j++){
@@ -326,7 +326,7 @@
                                       });
 
                                       axios
-                                        .put('http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark/Parkingspaceowner/' + this.newsListForOwner[j].id, json2, {headers: {'Content-Type': 'application/json'}}
+                                        .put('http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark2/Parkingspaceowner/' + this.newsListForOwner[j].id, json2, {headers: {'Content-Type': 'application/json'}}
                                         ).then((res) => {
                                         console.log(res);
 
@@ -338,7 +338,7 @@
                                           "iot_message_state": 1
                                         });
                                         axios
-                                          .put('http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark/Iotmessage/' + this.newsList[i].id, json, {headers: {'Content-Type': 'application/json'}}
+                                          .put('http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark2/Iotmessage/' + this.newsList[i].id, json, {headers: {'Content-Type': 'application/json'}}
                                           ).then((res) => {
                                           console.log(res);
                                         })
@@ -369,20 +369,31 @@
           user_state: this.addDetail.user_state,
           iot_message_state: this.addDetail.iot_message_state,
         });
-        let json = JSON.stringify({
+
+        let json = {
           "license_plate": this.addDetail.license_plate,
           "message_time": this.addDetail.message_time,
           "parking_space_id": parseInt(this.addDetail.parking_space_id),
-          "user_state": parseInt(this.addDetail.user_state),
-          "iot_message_state": parseInt(this.addDetail.iot_message_state),
-        });
+          "user_state" : parseInt(this.addDetail.user_state),
+          "iot_message_state" : parseInt(this.addDetail.iot_message_state),
+        };
 
+        if(this.addDetail.parking_space_id == null){
+          delete json.parking_space_id;
+        }
+        if(this.addDetail.user_state == null){
+          delete json.user_state;
+        }
+
+        json = JSON.stringify(json);
+
+        console.log(json);
         axios
-          .post('http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark/Iotmessage/', json, {headers: {'Content-Type': 'application/json'}}
+          .post('http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark2/Iotmessage/', json, {headers: {'Content-Type': 'application/json'}}
           ).then((res) => {
           console.log(res);
           axios
-            .get('http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark/Iotmessage/')
+            .get('http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark2/Iotmessage/')
             .then(response => {
               this.newsList = response.data.Iotmessage
             })
@@ -392,11 +403,11 @@
       //删除
       deletelist(id, i) {
         this.newsList.splice(i, 1);
-        axios.delete('http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark/Iotmessage/' + id)
+        axios.delete('http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark2/Iotmessage/' + id)
           .then((res) => {
             console.log(res);
             axios
-              .get('http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark/Iotmessage/')
+              .get('http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark2/Iotmessage/')
               .then(response => {
                 this.newsList = response.data.Iotmessage
               })
@@ -440,7 +451,7 @@
           "message_state": 0,
         });
         axios
-          .post('http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark/Message', json, {headers: {'Content-Type': 'application/json'}}
+          .post('http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark2/Message', json, {headers: {'Content-Type': 'application/json'}}
           ).then((res) => {
           console.log(res);
         })

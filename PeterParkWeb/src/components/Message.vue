@@ -75,7 +75,7 @@
         setTimeout(() =>{
           if(global.MessageWatchFlag){
         axios
-          .get('http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark/Message/')
+          .get('http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark2/Message/')
           .then(response => {
             this.newsList = response.data.Message;
           })
@@ -103,11 +103,11 @@
         });
 
         axios
-          .post('http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark/Message/', json, {headers: {'Content-Type': 'application/json'}}
+          .post('http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark2/Message/', json, {headers: {'Content-Type': 'application/json'}}
           ).then((res) => {
           console.log(res);
           axios
-            .get('http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark/Message/')
+            .get('http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark2/Message/')
             .then(response => {
               this.newsList = response.data.Message
             })
@@ -117,11 +117,11 @@
       //删除
       deletelist(id, i) {
         this.newsList.splice(i, 1);
-        axios.delete('http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark/Message/' + id)
+        axios.delete('http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark2/Message/' + id)
           .then((res) => {
             console.log(res);
             axios
-              .get('http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark/Message/')
+              .get('http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark2/Message/')
               .then(response => {
                 this.newsList = response.data.Message
               })
@@ -167,7 +167,7 @@
           "message_state": parseInt(this.editDetail.message_state),
         });
         axios
-          .put('http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark/Message/' + this.editid, json, {headers: {'Content-Type': 'application/json'}}
+          .put('http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark2/Message/' + this.editid, json, {headers: {'Content-Type': 'application/json'}}
           ).then((res) => {
           console.log(res);
         })

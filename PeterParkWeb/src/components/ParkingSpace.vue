@@ -81,7 +81,7 @@
         setTimeout(() =>{
           if(global.ParkingSpaceWatchFlag){
           axios
-            .get('http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark/Parkingspace/')
+            .get('http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark2/Parkingspace/')
             .then(response => {
               this.newsList = response.data.Parkingspace;
             })
@@ -111,11 +111,11 @@
         });
 
         axios
-          .post('http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark/Parkingspace/', json, {headers: {'Content-Type': 'application/json'}}
+          .post('http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark2/Parkingspace/', json, {headers: {'Content-Type': 'application/json'}}
           ).then((res) => {
           console.log(res);
           axios
-            .get('http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark/Parkingspace/')
+            .get('http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark2/Parkingspace/')
             .then(response => {
               this.newsList = response.data.Parkingspace
             })
@@ -125,11 +125,11 @@
       //删除
       deletelist(id, i) {
         this.newsList.splice(i, 1);
-        axios.delete('http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark/Parkingspace/' + id)
+        axios.delete('http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark2/Parkingspace/' + id)
           .then((res) => {
             console.log(res);
             axios
-              .get('http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark/Parkingspace/')
+              .get('http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark2/Parkingspace/')
               .then(response => {
                 this.newsList = response.data.Parkingspace
               })
@@ -178,7 +178,7 @@
           "parking_space_state": this.editDetail.parking_space_state
         });
         axios
-          .put('http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark/Parkingspace/' + this.editid, json, {headers: {'Content-Type': 'application/json'}}
+          .put('http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark2/Parkingspace/' + this.editid, json, {headers: {'Content-Type': 'application/json'}}
           ).then((res) => {
           console.log(res);
         })
