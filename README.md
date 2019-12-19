@@ -142,3 +142,11 @@ watch: {
 #### 全局变量
 + userAuth: 业主：parkingSpaceOwner 非业主：Parkinglotuser
 + licensePlate: 如果没有牌照信息就是 ""
+### 停车流程测试
++ 登录小程序，通过tabbar进入导航界面
++ 通过postman等发送Iotmessage请求,其中包括车牌、时间和state为1，若web端未启动，可以直接修改对于user中的state 0->1
++ 界面会显示权限检测中，此时若有权限，则小程序端会发送iotmessage，包括车牌、时间、state为2,web端会将对于user state 1->2（若web端未启动，则可以自己对user状态从1改为2）
++ 界面会提示已进入停车场，生成订单并推荐最优车位，此时可以用postman对Parkinglottraffic进行修改来改变路况，再次点击想要导航的车位可以看到路线的变化
++ 模拟用户停完车，点击模拟停车按钮，订单添加停车位信息，停车位变为不可用
++ 用户开车离开，通过postman发送Iotmessage请求，包括车牌、时间和state为0，若web端未启动，可以直接修改对于user中的state 2->0
++ 小程序会提示一离开车场需要支付车位，进入支付页面，点击确认支付，支付成功，更改订单状态、车位状态，流程结束
