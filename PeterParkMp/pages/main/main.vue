@@ -19,6 +19,7 @@
 						</view>
 					</view>
 				</view>
+				<image src="../../static/img/spider.jpg" class='backimage'></image>
 				</view>
 				<view v-if="!hasLogin" class="hello">
 					<view class="title">
@@ -29,9 +30,9 @@
 					</view>
 				</view>
 			</view>
-			
-		<!-- drawer -->
 		</scroll-view>
+
+		<!-- drawer -->
 		<view class="DrawerClose" :class="modalName=='viewModal'?'show':''" @tap="hideModal">
 			<text class="cuIcon-pullright"></text>
 		</view>
@@ -172,6 +173,11 @@
 	page {
 		background-image: var(--gradualBlue);
 		width: 100vw;
+		overflow: hidden;
+	}
+	.backimage{
+		width: 100vw;
+		height: 130vw;
 		overflow: hidden;
 	}
 	.hello {
