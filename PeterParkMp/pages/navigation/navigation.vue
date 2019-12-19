@@ -135,10 +135,15 @@
 							console.log(res.data.id);
 							this.updateOrderId(res.data.id);
 							console.log(that.orderId);
+							uni.request({
+								url: 'http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark/Parkinglottraffic/',
+								success: res => {
+									this.traffic = res.data.Parkinglottraffic;
+									this.recommendSpace();
+								}
+							});
 						}
 					});
-					this.recommendSpace();
-
 				}else if(oldVal==2 && val ==0){
 					this.userState=3
 					this.endTime=new Date().toUTCString();
@@ -279,6 +284,9 @@
 				return this.parkingSpace[index - 1].parking_space_id;
 			},
 			navigate(ele, row, col) {
+				if(ele>900){
+					ele=ele-900;
+				}
 				uni.request({
 					url: 'http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark/Parkinglottraffic/',
 					success: res => {
