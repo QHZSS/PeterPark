@@ -15,7 +15,7 @@ import {
 } from 'vuex'
 
 export default {
-	computed: mapState(['licensePlate','hasLogin','orderId','orderSpace']),
+	computed: mapState(['licensePlate','hasLogin','orderId']),
 	data() {
 		return {
 			orderInfo:{},
@@ -27,7 +27,6 @@ export default {
 		}
 	},
 	async onLoad() {
-		console.log(this.orderId);
 		let that=this;
 		await uni.request({
 			url:'http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark/Parkingorder/?Parkingorder.id='+that.orderId,
@@ -126,25 +125,6 @@ export default {
 				},
 				success: (res) => {
 					console.log("pay sucess");
-					uni.request({
-						url: 'http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark/Parkingspace/'+that.orderSpace,
-						success: res => {
-							console.log(res.data);
-							uni.request({
-								url: 'http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark/Parkingspace/'+that.orderSpace,
-								method: "PUT",
-								data: {
-									"parking_space_id":res.data.parking_space_id,
-									"parking_space_location": res.data.parking_space_location,
-									"parking_space_owner": res.data.parking_space_owner,
-									"parking_space_state":"1"
-								},
-								success: res => {
-									console.log(res.data);
-								}
-							});
-						}
-					});
 				},
 				fail:(err)=> {
 					console.log("err"+err);
