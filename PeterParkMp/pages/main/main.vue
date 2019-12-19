@@ -7,14 +7,14 @@
 					<view class="padding cu-item " >						
 						<view class="cu-avatar lg radius" :style="'background-image:url('+userAvatar+')'" @tap="showModal" data-target="viewModal"></view>
 						<view class="content" style="text-align:center">
-							<view class="text-green text-lg " >
+							<view class="text-blue text-lg " >
 								<text class="xl text-green cuIcon-weixin"></text>
 								{{ userName }}
 							</view>	
 							<view class="flex">
-								<text class="xl text-green cuIcon-people"></text>
-								<text v-if="userAuth == 'parkingSpaceOwner'" class="text-green text-lg ">Auth:业主</text>
-								<text v-if="userAuth == 'Parkinglotuser'" class="text-green text-lg ">Auth:停车用户</text>
+								<text class="xl text-blue cuIcon-people"></text>
+								<text v-if="userAuth == 'parkingSpaceOwner'" class="text-blue text-lg ">Auth:业主</text>
+								<text v-if="userAuth == 'Parkinglotuser'" class="text-blue text-lg ">Auth:停车用户</text>
 							</view>
 						</view>
 					</view>
@@ -25,11 +25,12 @@
 						您好 游客。
 					</view>
 					<view class="ul">
-						<view>这是 uni-app 带登录模板的示例App首页。</view>
 						<view>在 “我的” 中点击 “登录” 可以 “登录您的账户”</view>
 					</view>
 				</view>
 			</view>
+			
+		<!-- drawer -->
 		</scroll-view>
 		<view class="DrawerClose" :class="modalName=='viewModal'?'show':''" @tap="hideModal">
 			<text class="cuIcon-pullright"></text>
@@ -38,19 +39,23 @@
 			<view class="cu-list menu">
 				<view class="cu-item" v-for="(item1,index1) in menuList" :key="index1" @tap="navigator(item1.navigator)">
 					<view class="content">
-						<text class="text-black">{{item1.name}}</text>
-					</view>
-				</view>
-				<view  class="cu-item" v-for="(item3,index3) in parkingList" :key="index3" @tap="switchtoitem(item3.navigator)">
-					<view class="content">
-						<text class="text-black">{{item3.name}}</text>
+						<text  :class="'xl text-blue cuIcon-'+item1.icon"></text>
+						<text class="text-blue">{{item1.name}}</text>
 					</view>
 				</view>
 				<view v-if="userAuth ==='parkingSpaceOwner'" class="cu-item" v-for="(item2,index2) in parkingSpaceOwnerList" :key="index2" @tap="switchtoitem(item2.navigator)">
 					<view class="content">
-						<text class="text-black">{{item2.name}}</text>
+						<text  :class="'xl text-blue cuIcon-'+item2.icon"></text>
+						<text class="text-blue">{{item2.name}}</text>
 					</view>
 				</view>
+				<view  class="cu-item" v-for="(item3,index3) in parkingList" :key="index3" @tap="switchtoitem(item3.navigator)">
+					<view class="content">
+						<text  :class="'xl text-blue cuIcon-'+item3.icon"></text>
+						<text class="text-blue">{{item3.name}}</text>
+					</view>
+				</view>
+				
 			</view>
 		</scroll-view>
 	</view>
@@ -66,25 +71,37 @@
 			return {
 				modalName:null,
 				menuList:[
-					{
+					{	icon:'location',
 						name:"停车位导航",
 						navigator:"navigation"
 					}
 					
 				],
 				parkingList:[
-					{
+					{	icon:'message',
 						name:"消息列表",
 						navigator:"message"
 					},{
+						icon:'moneybag',
+						name:"计费规则",
+						navigator:"accountingRules"
+					},
+					{
+						icon:'pay',
 						name:"支付（之后需要从drawer删除）",
 						navigator:"pay"
+					},
+					{
+						icon:'phone',
+						name:"联系我们",
+						navigator:"contactUs"
 					}
 					
 				],
 				parkingSpaceOwnerList:[
 					{
-						name:"停车位状态查看",
+						icon:'taxi',
+						name:"停车位查看",
 						navigator:"mySpaceState"
 					},
 					

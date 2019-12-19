@@ -36,7 +36,19 @@
 				"navigationBarTitleText": "支付"
 			}
 		}
-	],
+	    ,{
+            "path" : "pages/accountingRules/accountingRules",
+            "style" : {
+				"navigationBarTitleText": "计费规则"
+			}
+        }
+        ,{
+            "path" : "pages/contactUs/contactUs",
+            "style" : {
+				"navigationBarTitleText": "联系我们"
+			}
+        }
+    ],
 	"tabBar": {
 		"color": "#7a7e83",
 		"selectedColor": "#0faeff",

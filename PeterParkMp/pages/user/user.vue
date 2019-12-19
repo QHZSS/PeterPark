@@ -11,11 +11,22 @@
 			<button @tap="bindLicensePlate" type="default">绑定车牌</button>
 		</view>
 		<view v-else>
-			<text>车牌:{{licensePlate}}</text>
+			<view class="cu-list ">
+				<view class="padding cu-item " >							
+					<view class="content" style="text-align:center">
+						<view class="text-blue text-lg " >
+							<text class="xl text-blue cuIcon-emoji"></text>
+							<text>车牌:{{licensePlate}}</text>
+						</view>	
+					</view>
+				</view>
+			</view>
+			
 		</view>	
         <view class="btn-row">
-            <button v-if="!hasLogin" type="primary" class="primary" @tap="bindLogin">登录</button>
-            <button v-if="hasLogin" type="default" @tap="bindLogout">退出登录</button>
+            <button v-if="!hasLogin" type="primary" class="primary" @tap="bindLogin">
+				<text class="text-blue text-lg " >登录</text></button>
+            <button v-if="hasLogin" type="default" @tap="bindLogout"><text class="text-blue text-lg " >退出登录</text></button>
         </view>
 		
     </view>
