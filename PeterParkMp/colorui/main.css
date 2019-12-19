@@ -1229,9 +1229,10 @@ button.cuIcon.lg {
 
 .cu-list.menu-avatar>.cu-item .content {
 	position: absolute;
-	left: 146upx;
-	width: calc(100% - 96upx - 60upx - 120upx - 20upx);
+	left: 150upx;
+	width: calc(100% - 150upx);
 	line-height: 1.6em;
+	align-items: center;
 }
 
 .cu-list.menu-avatar>.cu-item .content.flex-sub {
@@ -3860,7 +3861,7 @@ scroll-view.cu-steps .cu-item {
 .text-blue,
 .line-blue,
 .lines-blue {
-	color: #0081ff;
+	color: #0faeff;
 }
 
 .text-purple,

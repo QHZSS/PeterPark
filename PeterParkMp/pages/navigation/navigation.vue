@@ -17,9 +17,15 @@
 					</view>
 				</view>
 			</view>
-			<button @tap="finishParkingSimulator">停车完成IoT模拟检测</button>
+			<view class="padding flex flex-direction">
+				<button class="cu-btn bg-red margin-tb-sm lg" @tap="finishParkingSimulator">停车完成IoT模拟检测</button>
+			</view>
 		</view>
-		<view v-else-if="userState == 0">欢迎来到PeterPark，当您进入停车场后，此页面会显示停车场地图及推荐位置，若您在PeterPark拥有车位，会优先导航到您自己的车位</view>
+		<view class="navi-desc" v-else-if="userState == 0">
+			<text class="navi-desc-title padding">欢迎来到PeterPark!</text>
+			<text class="navi-desc-text padding">当您进入停车场后，此页面会显示停车场地图及推荐位置</text>
+			<text class="navi-desc-text padding">若您在PeterPark拥有车位，会优先导航到您自己的车位</text>
+		</view>
 	</view>
 </template>
 
@@ -50,7 +56,7 @@
 			return {
 				parkingUserInfo: Object,
 				count: 0,
-				userState: 0,
+				userState: 2,
 				map: this.map,
 				parkingSpace: {},
 				adjMatrix: [
@@ -93,7 +99,7 @@
 						this.userState = 1;
 						let date=new Date().toUTCString();
 						uni.request({
-							url: 'http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark/Iotmessage/',
+							url: 'http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark2/Iotmessage/',
 							method: "POST",
 							data: {
 								"license_plate":that.licensePlate,
@@ -124,7 +130,7 @@
 					
 					this.startTime = new Date().toUTCString();
 					uni.request({
-						url: 'http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark/Parkingorder/',
+						url: 'http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark2/Parkingorder/',
 						method: "POST",
 						data: {
 							"parking_user_name": that.userName,
@@ -136,7 +142,7 @@
 							this.updateOrderId(res.data.id);
 							console.log(that.orderId);
 							uni.request({
-								url: 'http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark/Parkinglottraffic/',
+								url: 'http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark2/Parkinglottraffic/',
 								success: res => {
 									this.traffic = res.data.Parkinglottraffic;
 									this.recommendSpace();
@@ -148,7 +154,7 @@
 					this.userState=3
 					this.endTime=new Date().toUTCString();
 					uni.request({
-						url: 'http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark/Parkingorder/'+that.orderId,
+						url: 'http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark2/Parkingorder/'+that.orderId,
 						method: "PUT",
 						data: {
 							"parking_user_name": that.userName,
@@ -160,11 +166,11 @@
 						success: res => {
 							console.log(res.data);
 							uni.request({
-								url: 'http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark/Parkingspace/'+that.orderSpace,
+								url: 'http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark2/Parkingspace/'+that.orderSpace,
 								success: res => {
 									console.log(res.data);
 									uni.request({
-										url: 'http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark/Parkingspace/'+that.orderSpace,
+										url: 'http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark2/Parkingspace/'+that.orderSpace,
 										method: "PUT",
 										data: {
 											"parking_space_id":res.data.parking_space_id,
@@ -202,7 +208,7 @@
 					setTimeout(() => {
 						if (this.userState == 0 || this.userState==1|| this.userState==2) {
 							uni.request({
-								url: 'http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark/User/?User.user_name=' + that.userName, //仅为示例，并非真实接口地址。
+								url: 'http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark2/User/?User.user_name=' + that.userName, //仅为示例，并非真实接口地址。
 								success: res => {
 									if (that.userAuth == 'Parkinglotuser') {
 										that.parkingUserInfo = res.data.Parkinglotuser[0];
@@ -221,7 +227,7 @@
 		},
 		onLoad() {
 			uni.request({
-				url: 'http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark/Parkingspace/',
+				url: 'http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark2/Parkingspace/',
 				success: res => {
 					this.parkingSpace = res.data.Parkingspace;
 
@@ -286,7 +292,7 @@
 			},
 			loadParkingSpace() {
 				uni.request({
-					url: 'http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark/Parkingspace/',
+					url: 'http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark2/Parkingspace/',
 					success: res => {
 						this.parkingSpace = res.data.Parkingspace;
 					}
@@ -307,7 +313,7 @@
 					ele=ele-900;
 				}
 				uni.request({
-					url: 'http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark/Parkinglottraffic/',
+					url: 'http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark2/Parkinglottraffic/',
 					success: res => {
 						this.traffic = res.data.Parkinglottraffic;
 					}
@@ -595,7 +601,7 @@
 				let that=this;
 				let date=new Date().toUTCString();
 				uni.request({
-					url: 'http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark/Iotmessage/',
+					url: 'http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark2/Iotmessage/',
 					method: "POST",
 					data: {
 						"license_plate":that.licensePlate,
@@ -607,11 +613,11 @@
 					success: res => {
 						console.log(res.data);
 						uni.request({
-							url: 'http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark/Parkingspace/?Parkingspace.parking_space_id='+this.spaceId,
+							url: 'http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark2/Parkingspace/?Parkingspace.parking_space_id='+this.spaceId,
 							success: res => {
 								this.updateOrderSpace(res.data.Parkingspace[0].id);
 								uni.request({
-									url: 'http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark/Parkingspace/'+that.orderSpace,
+									url: 'http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark2/Parkingspace/'+that.orderSpace,
 									method: "PUT",
 									data: {
 										"parking_space_id":res.data.Parkingspace[0].parking_space_id,
@@ -622,7 +628,7 @@
 									success: res => {
 										console.log(res.data);
 										uni.request({
-											url: 'http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark/Parkingorder/'+that.orderId,
+											url: 'http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark2/Parkingorder/'+that.orderId,
 											method: "PUT",
 											data: {
 												"parking_user_name": that.userName,
@@ -663,5 +669,19 @@
 		display: flex;
 		align-items: center;
 		justify-content: space-around;
+	}
+	.navi-desc{
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: space-between;
+	}
+	.navi-desc-title{
+		font-size: 50rpx;
+		color: #8799A3;
+	}
+	.navi-desc-text{
+		font-size: 27rpx;
+		color: #8799A3;
 	}
 </style>

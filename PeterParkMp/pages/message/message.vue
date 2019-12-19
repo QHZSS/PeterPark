@@ -49,7 +49,7 @@
 					setTimeout(() => {
 						if(this.page_show == 1){
 							uni.request({
-								url: 'http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark/Message/?Message.license_plate='+this.licensePlate,
+								url: 'http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark2/Message/?Message.license_plate='+this.licensePlate,
 								header: {
 									'custom-header': 'hello'
 								},

@@ -2,8 +2,7 @@
 	"pages": [ //pages数组中第一项表示应用启动页,
 		{
 			"path": "pages/guide/guide",
-			"style": {
-			}
+			"style": {}
 		},
 		{
 			"path": "pages/main/main",
@@ -40,8 +39,17 @@
 			"style": {
 				"navigationBarTitleText": "支付"
 			}
+		}, {
+			"path": "pages/accountingRules/accountingRules",
+			"style": {
+				"navigationBarTitleText": "计费规则"
+			}
+		}, {
+			"path": "pages/contactUs/contactUs",
+			"style": {
+				"navigationBarTitleText": "联系我们"
+			}
 		}
-
 	],
 	"tabBar": {
 		"color": "#7a7e83",

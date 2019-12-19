@@ -10,20 +10,37 @@
 </template>
 
 <script>
+	import {
+		mapState,
+		mapMutations
+	} from 'vuex';
 	export default {
+		computed: mapState(['firstEntry']),
 		data() {
 			return {
 
 			}
 		},
 		onLoad() {
-			setTimeout(function() {
+			if(this.firstEntry){
+				setTimeout(function() {
+					uni.switchTab({
+						url: '../main/main',
+						animationType: 'fade-in'
+					})
+				}, 2000);
+				this.updatefirstEntry(false);
+			}else{
 				uni.switchTab({
 					url: '../main/main',
 					animationType: 'fade-in'
 				})
-			}, 2000);
+			}
+			
 
+		},
+		methods:{
+			...mapMutations(['updatefirstEntry'])
 		}
 	}
 </script>

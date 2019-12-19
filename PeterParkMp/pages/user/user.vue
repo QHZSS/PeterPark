@@ -1,5 +1,7 @@
 <template>
+<view>
     <view class="content">
+		<userInfoBar></userInfoBar>
 		<view v-if="licensePlate == ''">
 			<view class="action">
 				<text class="cuIcon-title text-orange"></text>
@@ -9,14 +11,26 @@
 			<button @tap="bindLicensePlate" type="default">绑定车牌</button>
 		</view>
 		<view v-else>
-			<text>车牌:{{licensePlate}}</text>
+			<view class="cu-list ">
+				<view class="padding cu-item " >							
+					<view class="content" style="text-align:center">
+						<view class="text-blue text-lg " >
+							<text class="xl text-blue cuIcon-emoji"></text>
+							<text>车牌:{{licensePlate}}</text>
+						</view>	
+					</view>
+				</view>
+			</view>
+			
 		</view>	
         <view class="btn-row">
-            <button v-if="!hasLogin" type="primary" class="primary" @tap="bindLogin">登录</button>
-            <button v-if="hasLogin" type="default" @tap="bindLogout">退出登录</button>
+            <button v-if="!hasLogin" type="primary" class="primary" @tap="bindLogin">
+				<text class="text-blue text-lg " >登录</text></button>
+            <button v-if="hasLogin" type="default" @tap="bindLogout"><text class="text-blue text-lg " >退出登录</text></button>
         </view>
 		
     </view>
+</view>
 </template>
 
 <script>
@@ -24,7 +38,7 @@
         mapState,
         mapMutations
     } from 'vuex'
-
+	import userInfoBar from '../../components/userinfobar/userinfobar.vue'
     export default {
 		data() {
 			return {
@@ -32,7 +46,7 @@
 			}
 		},
         computed: {
-            ...mapState(['hasLogin', 'forcedLogin','licensePlate','userAuth','userName'])
+            ...mapState(['hasLogin', 'forcedLogin','licensePlate','userAuth','userName','userAvatar'])
         },
         methods: {
             ...mapMutations(['logout']),
@@ -56,7 +70,7 @@
 				let plate = this.newlicenseplate;
 				console.log(plate);
 				await uni.request({
-						url:'http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark/User/?User.user_name='+this.userName, 
+						url:'http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark2/User/?User.user_name='+this.userName, 
 						method:'GET',	
 						header: {
 							'custom-header': 'hello' //自定义请求头信息						
@@ -70,7 +84,7 @@
 								let license_plate = plate;
 								let parkinglot_user_state = 0;
 								uni.request({
-									url:'http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark/Parkinglotuser/'+id,
+									url:'http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark2/Parkinglotuser/'+id,
 									method:'PUT',
 									data:{
 										in_black_list:in_black_list,
@@ -107,7 +121,10 @@
 						}
 					});
 					}
-        }
+        },
+		components: {
+			userInfoBar
+		}
     }
 </script>
 

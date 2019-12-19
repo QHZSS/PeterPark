@@ -16,6 +16,7 @@ const store = new Vuex.Store({
 		licensePlate:"",
 		orderId:0,
 		orderSpace:-1,
+		firstEntry:true,
     },
     mutations: {
         async login(state, userInfoSet) {
@@ -28,7 +29,7 @@ const store = new Vuex.Store({
 			 */
 			try{
 				await uni.request({
-						url:'http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark/User/?User.user_name='+state.userName, 
+						url:'http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark2/User/?User.user_name='+state.userName, 
 						method:'GET',	
 						header: {
 							'custom-header': 'hello' //自定义请求头信息						
@@ -38,7 +39,7 @@ const store = new Vuex.Store({
 								if(res.data.Parkinglotuser == undefined){
 									console.log("查无此用户");
 									uni.request({
-												url:"http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark/Parkinglotuser/", 
+												url:"http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark2/Parkinglotuser/", 
 										 		method:'POST',
 												data: {
 														user_name:state.userName,
@@ -104,6 +105,9 @@ const store = new Vuex.Store({
 		},
 		updateOrderSpace(state,orderSpace){
 			state.orderSpace=orderSpace
+		},
+		updatefirstEntry(state,firstEntry){
+			state.firstEntry=firstEntry
 		}
     }
 })

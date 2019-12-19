@@ -1,6 +1,7 @@
 <template>
   <div id="table">
     <div class="add">
+      仅用于模拟IoT系统:
       <input type="text" v-model="addDetail.license_plate" name="license_plate" value="" placeholder="车牌号码" />
       <input type="text" v-model="addDetail.message_time" name="message_time" value="" placeholder="消息时间" />
       <input type="text" v-model="addDetail.parking_space_id" name="parking_space_id" value="" placeholder="停车位ID" />

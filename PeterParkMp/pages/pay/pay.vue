@@ -29,7 +29,7 @@ export default {
 	async onLoad() {
 		let that=this;
 		await uni.request({
-			url:'http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark/Parkingorder/?Parkingorder.id='+that.orderId,
+			url:'http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark2/Parkingorder/?Parkingorder.id='+that.orderId,
 			method:'GET',
 			header: {
 				'custom-header': 'hello'
@@ -78,7 +78,7 @@ export default {
 				if(that.orderInfo.order_state == 1){
 
 				uni.request({
-					url:'http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark/Parkingorder/'+that.orderId,
+					url:'http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark2/Parkingorder/'+that.orderId,
 					method:'PUT',
 					data: {
 						  parking_user_name: that.orderInfo.parking_user_name,
@@ -109,7 +109,7 @@ export default {
 		payOrderFee(){
 			let that = this;
 			uni.request({
-				url:'http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark/Parkingorder/'+that.orderId,
+				url:'http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark2/Parkingorder/'+that.orderId,
 				method:'PUT',
 				data: {
 					  parking_user_name: that.orderInfo.parking_user_name,
