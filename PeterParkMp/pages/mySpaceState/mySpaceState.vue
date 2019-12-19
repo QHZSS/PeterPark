@@ -37,7 +37,7 @@
 		async onLoad() {
 			let that = this;
 			await uni.request({
-				url:'http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark/User/?User.user_name='+this.userName,
+				url:'http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark2/User/?User.user_name='+this.userName,
 				method:'GET',
 				header: {
 					'custom-header': 'hello' //自定义请求头信息						
@@ -51,7 +51,7 @@
 					//console.log("rentState+"+that.rentState);
 					//console.log("id:"+id);
 					 uni.request({
-						url:'http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark/Parkingspace/?Parkingspace.parking_space_id='+that.space_id,
+						url:'http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark2/Parkingspace/?Parkingspace.parking_space_id='+that.space_id,
 						method:'GET',
 						header: {
 							'custom-header': 'hello' //自定义请求头信息						
@@ -80,7 +80,7 @@
 				let that = this;
 				let userInfo = that.user;
 				await uni.request({
-					url:'http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark/Parkingspaceowner/'+that.id,
+					url:'http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark2/Parkingspaceowner/'+that.id,
 					method:'PUT',
 					data:{
 						//parkingspace_owner_id:userInfo.parkingspace_owner_id,
@@ -107,7 +107,7 @@
 					});
 				let parkingSpaceInfo = {};
 				await uni.request({
-					url:'http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark/Parkingspace/?Parkingspace.parking_space_id='+that.space_id,
+					url:'http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark2/Parkingspace/?Parkingspace.parking_space_id='+that.space_id,
 					method:'GET',
 					header: {
 						'custom-header': 'hello', //自定义请求头信息
@@ -119,7 +119,7 @@
 							console.log(parkingSpaceInfo);
 							that.parkingSpaceEntityId = parkingSpaceInfo.id;
 							uni.request({
-								url:'http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark/Parkingspace/'+that.parkingSpaceEntityId,
+								url:'http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark2/Parkingspace/'+that.parkingSpaceEntityId,
 								method:'PUT',
 								data:{
 									//parkingspace_owner_id:userInfo.parkingspace_owner_id,
@@ -154,7 +154,7 @@
 				let that = this;
 				let userInfo = that.user;
 				await uni.request({
-					url:'http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark/Parkingspaceowner/'+that.id,
+					url:'http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark2/Parkingspaceowner/'+that.id,
 					method:'PUT',
 					data:{
 						//parkingspace_owner_id:userInfo.parkingspace_owner_id,
@@ -179,7 +179,7 @@
 					});
 				let parkingSpaceInfo = {};
 				await uni.request({
-					url:'http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark/Parkingspace/?Parkingspace.parking_space_id='+that.space_id,
+					url:'http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark2/Parkingspace/?Parkingspace.parking_space_id='+that.space_id,
 					method:'GET',
 					header: {
 						'custom-header': 'hello', //自定义请求头信息
@@ -191,7 +191,7 @@
 							console.log(parkingSpaceInfo);
 							that.parkingSpaceEntityId = parkingSpaceInfo.id;
 							uni.request({
-												url:'http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark/Parkingspace/'+that.parkingSpaceEntityId,
+												url:'http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark2/Parkingspace/'+that.parkingSpaceEntityId,
 												method:'PUT',
 												data:{
 													//parkingspace_owner_id:userInfo.parkingspace_owner_id,

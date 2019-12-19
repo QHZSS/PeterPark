@@ -70,7 +70,7 @@
 				let plate = this.newlicenseplate;
 				console.log(plate);
 				await uni.request({
-						url:'http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark/User/?User.user_name='+this.userName, 
+						url:'http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark2/User/?User.user_name='+this.userName, 
 						method:'GET',	
 						header: {
 							'custom-header': 'hello' //自定义请求头信息						
@@ -84,7 +84,7 @@
 								let license_plate = plate;
 								let parkinglot_user_state = 0;
 								uni.request({
-									url:'http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark/Parkinglotuser/'+id,
+									url:'http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark2/Parkinglotuser/'+id,
 									method:'PUT',
 									data:{
 										in_black_list:in_black_list,
