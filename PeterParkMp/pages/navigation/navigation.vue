@@ -1,6 +1,6 @@
 <template>
 	<view>
-		<view v-if="userState == 1">
+		<view v-if="userState == 2">
 			<view class="cu-bar bg-white flex">
 				<view class="action">
 					<text class="cuIcon-title text-orange "></text>
@@ -85,12 +85,43 @@
 		watch: {
 			'parkingUserInfo.user_state': function(val, oldVal) {
 				let that = this;
-				if (oldVal == 1 && val == 2 && this.parkingUserInfo.in_black_list == 0) {
+				if(oldVal==0 && val ==1){
+					uni.showLoading({
+						title: '正在检测权限'
+					});
+					if(this.parkingUserInfo.in_black_list==0){
+						this.userState = 1;
+						let date=new Date().toUTCString();
+						uni.request({
+							url: 'http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark/Iotmessage/',
+							method: "POST",
+							data: {
+								"license_plate":that.licensePlate,
+								"message_time":date,
+								"iot_message_state":1,
+								"user_state":2
+							},
+							success: res => {
+								
+								console.log(res.data);
+							}
+						})
+					}else{
+						uni.hideLoading();
+						uni.showModal({
+							title: '提示',
+							content: '您的账号信息在黑名单中，禁止停车'
+						});
+						this.userState = -1;
+					}
+				}else if (oldVal == 1 && val == 2) {
+					uni.hideLoading();
+					this.userState=2;
 					uni.showModal({
 						title: '提示',
 						content: '您已进入停车场，已为您推荐最优车位'
 					});
-					this.userState = 1;
+					
 					this.startTime = new Date().toUTCString();
 					uni.request({
 						url: 'http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark/Parkingorder/',
@@ -108,14 +139,8 @@
 					});
 					this.recommendSpace();
 
-				} else if (oldVal == 1 && val == 2 && this.parkingUserInfo.in_black_list == 1) {
-					uni.showModal({
-						title: '提示',
-						content: '您的账号信息在黑名单中，禁止停车'
-					});
-					this.userState = -1;
 				}else if(oldVal==2 && val ==0){
-					this.userState=2
+					this.userState=3
 					this.endTime=new Date().toUTCString();
 					uni.request({
 						url: 'http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark/Parkingorder/'+that.orderId,
@@ -151,7 +176,7 @@
 			if (this.hasLogin) {
 				while (this.count < 1000) {
 					setTimeout(() => {
-						if (this.userState == 0 || this.userState==1) {
+						if (this.userState == 0 || this.userState==1|| this.userState==2) {
 							uni.request({
 								url: 'http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark/User/?User.user_name=' + that.userName, //仅为示例，并非真实接口地址。
 								success: res => {
