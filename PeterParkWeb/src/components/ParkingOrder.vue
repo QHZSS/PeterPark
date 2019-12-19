@@ -273,7 +273,7 @@
 
   .mask {
     width: 300px;
-    height: 400px;
+    height: 350px;
     background: rgba(255, 255, 255, 1);
     position: absolute;
     left: 0;
