@@ -1,6 +1,11 @@
 {
 	"pages": [ //pages数组中第一项表示应用启动页,
 		{
+			"path": "pages/guide/guide",
+			"style": {
+			}
+		},
+		{
 			"path": "pages/main/main",
 			"style": {
 				"navigationBarTitleText": "首页"
@@ -36,6 +41,7 @@
 				"navigationBarTitleText": "支付"
 			}
 		}
+
 	],
 	"tabBar": {
 		"color": "#7a7e83",
