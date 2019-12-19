@@ -14,7 +14,8 @@ const store = new Vuex.Store({
 		userAvatar: "",
 		userAuth:"",
 		licensePlate:"",
-		orderId:0
+		orderId:0,
+		orderSpace:-1,
     },
     mutations: {
         async login(state, userInfoSet) {
@@ -100,6 +101,9 @@ const store = new Vuex.Store({
         },
 		updateOrderId(state,orderId){
 			state.orderId=orderId;
+		},
+		updateOrderSpace(state,orderSpace){
+			state.orderSpace=orderSpace
 		}
     }
 })

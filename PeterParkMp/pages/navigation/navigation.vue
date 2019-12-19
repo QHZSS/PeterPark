@@ -45,7 +45,7 @@
 		[10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 0]
 	];
 	export default {
-		computed: mapState(['forcedLogin', 'hasLogin', 'userName', 'userAvatar', 'userAuth', 'orderId','licensePlate']),
+		computed: mapState(['forcedLogin', 'hasLogin', 'userName', 'userAvatar', 'userAuth', 'orderId','licensePlate','orderSpace']),
 		data() {
 			return {
 				parkingUserInfo: Object,
@@ -77,9 +77,9 @@
 				path: [],
 				road: this.road,
 				traffic: [],
-				spaceId: -1,
 				startTime: "",
-				endTime:""
+				endTime:"",
+				spaceId:-1
 			};
 		},
 		watch: {
@@ -210,7 +210,7 @@
 			});
 		},
 		methods: {
-			...mapMutations(['updateOrderId']),
+			...mapMutations(['updateOrderId','updateOrderSpace']),
 			recommendSpace() {
 				let that = this;
 				let index = -1;
@@ -318,7 +318,7 @@
 				if (this.parkingSpace[index].parking_space_state == 0) {
 					return;
 				}
-				this.spaceId = index+1;
+				this.spaceId=index+1;
 				let pos = this.parkingSpace[index].parking_space_location.split(',');
 				pos[0] = parseInt(pos[0]);
 				pos[1] = parseInt(pos[1]);
@@ -587,21 +587,41 @@
 					},
 					success: res => {
 						console.log(res.data);
+						uni.request({
+							url: 'http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark/Parkingspace/?Parkingspace.parking_space_id='+this.spaceId,
+							success: res => {
+								this.updateOrderSpace(res.data.Parkingspace[0].id);
+								uni.request({
+									url: 'http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark/Parkingspace/'+that.orderSpace,
+									method: "PUT",
+									data: {
+										"parking_space_id":res.data.Parkingspace[0].parking_space_id,
+										"parking_space_location": res.data.Parkingspace[0].parking_space_location,
+										"parking_space_owner": res.data.Parkingspace[0].parking_space_owner,
+										"parking_space_state":"0"
+									},
+									success: res => {
+										console.log(res.data);
+										uni.request({
+											url: 'http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark/Parkingorder/'+that.orderId,
+											method: "PUT",
+											data: {
+												"parking_user_name": that.userName,
+												"start_time": date,
+												"order_state": 1,
+												"parking_space_id":this.spaceId
+											},
+											success: res => {
+												console.log(res.data);
+											}
+										});
+									}
+								});
+							}
+						});
 					}
 				});
-				uni.request({
-					url: 'http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark/Parkingorder/'+that.orderId,
-					method: "PUT",
-					data: {
-						"parking_user_name": that.userName,
-						"start_time": date,
-						"order_state": 1,
-						"parking_space_id":this.spaceId
-					},
-					success: res => {
-						console.log(res.data);
-					}
-				});
+				
 			}
 		}
 	};
