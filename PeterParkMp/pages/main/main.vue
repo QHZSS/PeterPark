@@ -3,14 +3,22 @@
 		<scroll-view scroll-y class="DrawerPage" :class="modalName=='viewModal'?'show':''">			
 			<view class="content">
 				<view v-if="hasLogin" class="hello">
-					<view class="title">
-						您好 {{userName}}，您已成功登录，欢迎使用PeterPark小程序。
-						请点击头像进入菜单
-						您的身份是{{userAuth}}
+				<view class="cu-list menu-avatar">
+					<view class="padding cu-item " >						
+						<view class="cu-avatar lg radius" :style="'background-image:url('+userAvatar+')'" @tap="showModal" data-target="viewModal"></view>
+						<view class="content" style="text-align:center">
+							<view class="text-green text-lg " >
+								<text class="xl text-green cuIcon-weixin"></text>
+								{{ userName }}
+							</view>	
+							<view class="flex">
+								<text class="xl text-green cuIcon-people"></text>
+								<text v-if="userAuth == 'parkingSpaceOwner'" class="text-green text-lg ">Auth:业主</text>
+								<text v-if="userAuth == 'Parkinglotuser'" class="text-green text-lg ">Auth:停车用户</text>
+							</view>
+						</view>
 					</view>
-					<view class="padding">
-						<view class="cu-avatar xl round" :style="'background-image:url('+userAvatar+')'" @tap="showModal" data-target="viewModal"></view>
-					</view>
+				</view>
 				</view>
 				<view v-if="!hasLogin" class="hello">
 					<view class="title">
@@ -52,7 +60,6 @@
 	import {
 		mapState
 	} from 'vuex'
-
 	export default {
 		computed: mapState(['forcedLogin', 'hasLogin', 'userName', 'userAvatar',"userAuth"]),
 		data() {
@@ -140,7 +147,7 @@
 				});
 				this.modalName = null
 			}
-		},
+		}
 	}
 </script>
 

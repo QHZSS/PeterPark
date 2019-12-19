@@ -1,5 +1,7 @@
 <template>
+<view>
     <view class="content">
+		<userInfoBar></userInfoBar>
 		<view v-if="licensePlate == ''">
 			<view class="action">
 				<text class="cuIcon-title text-orange"></text>
@@ -17,6 +19,7 @@
         </view>
 		
     </view>
+</view>
 </template>
 
 <script>
@@ -24,7 +27,7 @@
         mapState,
         mapMutations
     } from 'vuex'
-
+	import userInfoBar from '../../components/userinfobar/userinfobar.vue'
     export default {
 		data() {
 			return {
@@ -32,7 +35,7 @@
 			}
 		},
         computed: {
-            ...mapState(['hasLogin', 'forcedLogin','licensePlate','userAuth','userName'])
+            ...mapState(['hasLogin', 'forcedLogin','licensePlate','userAuth','userName','userAvatar'])
         },
         methods: {
             ...mapMutations(['logout']),
@@ -107,7 +110,10 @@
 						}
 					});
 					}
-        }
+        },
+		components: {
+			userInfoBar
+		}
     }
 </script>
 
