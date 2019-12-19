@@ -11,6 +11,8 @@ import ParkingOrder from './components/ParkingOrder'
 import ParkingSpace from './components/ParkingSpace'
 import Message from './components/Message'
 import IoTMessage from './components/IoTMessage'
+import Statistics from './components/Statistics'
+import ParkingLotTraffic from './components/ParkingLotTraffic'
 
 Vue.config.productionTip = false
 
@@ -21,12 +23,16 @@ const routes = [
   { path:'/ParkingOrder', component: ParkingOrder},
   { path:'/ParkingSpace', component: ParkingSpace},
   { path:'/Message', component: Message},
-  { path:'/IoTMessage', component: IoTMessage}
+  { path:'/IoTMessage', component: IoTMessage},
+  { path:'/Statistics', component: Statistics},
+  { path:'/ParkingLotTraffic', component: ParkingLotTraffic}
 ]
 
 const router = new VueRouter(
   {routes}
 );
+
+
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
