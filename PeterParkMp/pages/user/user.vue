@@ -1,6 +1,6 @@
 <template>
 <view>
-    <view class="content">
+    <view class="content bg-white">
 		<userInfoBar></userInfoBar>
 		<view v-if="licensePlate == ''">
 			<view class="action">
