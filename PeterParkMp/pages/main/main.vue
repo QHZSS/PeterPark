@@ -22,10 +22,10 @@
 				<image src="../../static/img/spider.jpg" class='backimage'></image>
 				</view>
 				<view v-if="!hasLogin" class="hello">
-					<view class="title">
+					<view class="title text-center">
 						您好 游客。
 					</view>
-					<view class="ul">
+					<view class="ul text-center">
 						<view>在 “我的” 中点击 “登录” 可以 “登录您的账户”</view>
 					</view>
 				</view>

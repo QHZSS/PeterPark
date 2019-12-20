@@ -180,6 +180,7 @@
 										},
 										success: res => {
 											console.log(res.data);
+											this.userState=0;
 										}
 									});
 								}
