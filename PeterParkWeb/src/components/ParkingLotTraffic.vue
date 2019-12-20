@@ -89,11 +89,11 @@
         });
 
         axios
-          .post('http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark2/Message/', json, {headers: {'Content-Type': 'application/json'}}
+          .post('http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark2/Parkinglottraffic/', json, {headers: {'Content-Type': 'application/json'}}
           ).then((res) => {
           console.log(res);
           axios
-            .get('http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark2/Message/')
+            .get('http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark2/Parkinglottraffic/')
             .then(response => {
               this.newsList = response.data.Parkinglottraffic
             })
@@ -147,10 +147,10 @@
 
         let json = JSON.stringify({
           "parkinglot_road_name": this.editDetail.parkinglot_road_name,
-          "parkinglot_road_cond": this.editDetail.parkinglot_road_cond,
+          "parkinglot_road_cond": parseFloat(this.editDetail.parkinglot_road_cond),
         });
         axios
-          .put('http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark2/Message/' + this.editid, json, {headers: {'Content-Type': 'application/json'}}
+          .put('http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark2/Parkinglottraffic/' + this.editid, json, {headers: {'Content-Type': 'application/json'}}
           ).then((res) => {
           console.log(res);
         })

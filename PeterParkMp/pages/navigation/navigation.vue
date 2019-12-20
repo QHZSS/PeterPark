@@ -11,8 +11,8 @@
 				<view class="row" v-for="(row, index) in map" :key="index">
 					<view class="col" v-for="(ele, eIndex) in row" :key="eIndex">
 						<view class="col solid" :class="'bg-' + groundColor(ele)" @tap="navigate(ele, index, eIndex)">
-							<text v-if="ele > 900">{{ getParkingSpaceId(ele - 900) }}</text>
-							<text v-else-if="ele >= 1">{{ getParkingSpaceId(ele) }}</text>
+							<text class="block-text" v-if="ele > 900">{{ getParkingSpaceId(ele - 900) }}</text>
+							<text class="block-text" v-else-if="ele >= 1">{{ getParkingSpaceId(ele) }}</text>
 						</view>
 					</view>
 				</view>
@@ -56,7 +56,7 @@
 			return {
 				parkingUserInfo: Object,
 				count: 0,
-				userState: 2,
+				userState: 0,
 				map: this.map,
 				parkingSpace: {},
 				adjMatrix: [
@@ -104,7 +104,7 @@
 							data: {
 								"license_plate":that.licensePlate,
 								"message_time":date,
-								"iot_message_state":1,
+								"iot_message_state":0,
 								"user_state":2
 							},
 							success: res => {
@@ -678,10 +678,15 @@
 	}
 	.navi-desc-title{
 		font-size: 50rpx;
+		margin-top: 20vh;
 		color: #8799A3;
 	}
 	.navi-desc-text{
 		font-size: 27rpx;
 		color: #8799A3;
 	}
+	.block-text{
+		font-size: 25rpx;
+	}
+	
 </style>
