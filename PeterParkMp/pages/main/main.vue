@@ -175,6 +175,7 @@
 		width: 100vw;
 		overflow: hidden;
 	}
+
 	.backimage{
 		width: 100vw;
 		height: 130vw;

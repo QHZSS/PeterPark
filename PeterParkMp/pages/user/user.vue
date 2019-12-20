@@ -1,6 +1,6 @@
 <template>
 <view>
-    <view class="content bg-white">
+    <view class="content bg-white thispage">
 		<userInfoBar></userInfoBar>
 		<view v-if="licensePlate == ''">
 			<view class="action">
@@ -129,5 +129,9 @@
 </script>
 
 <style>
-
+	.thispage{
+		min-height: 100vh;
+		background-color: #FFFFFF;
+		
+	}
 </style>
