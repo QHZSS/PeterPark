@@ -88,11 +88,6 @@
 						navigator:"accountingRules"
 					},
 					{
-						icon:'pay',
-						name:"支付（之后需要从drawer删除）",
-						navigator:"pay"
-					},
-					{
 						icon:'phone',
 						name:"联系我们",
 						navigator:"contactUs"

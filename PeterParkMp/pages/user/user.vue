@@ -23,10 +23,10 @@
 			</view>
 			
 		</view>	
-        <view class="btn-row">
+        <view>
             <button v-if="!hasLogin" type="primary" class="primary" @tap="bindLogin">
 				<text class="text-blue text-lg " >登录</text></button>
-            <button v-if="hasLogin" type="default" @tap="bindLogout"><text class="text-blue text-lg " >退出登录</text></button>
+            <button v-if="hasLogin" @tap="bindLogout" class="bg-red"><text class="text-white text-lg " >退出登录</text></button>
         </view>
 		
     </view>

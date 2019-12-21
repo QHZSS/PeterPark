@@ -639,6 +639,10 @@
 											},
 											success: res => {
 												console.log(res.data);
+												uni.showModal({
+													title:"提示",
+													content:"停车成功！您的停车位为："+this.spaceId
+												})
 											}
 										});
 									}

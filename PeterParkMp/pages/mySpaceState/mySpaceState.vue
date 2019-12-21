@@ -144,14 +144,14 @@
 								parking_space_id: parkingSpaceInfo.parking_space_id,
 								parking_space_location: parkingSpaceInfo.parking_space_location,
 								parking_space_owner: parkingSpaceInfo.parking_space_owner,
-								parking_space_state: 0
+								parking_space_state: 1
 							},
 							header: {
 								'custom-header': 'hello', //自定义请求头信息
 								'content-type': 'application/json'
 							},
 							success: (res) => {
-								console.log("put parking space state to 0 succes");
+								console.log("put parking space state to 1 succes");
 
 
 							},
@@ -217,14 +217,14 @@
 								parking_space_id: parkingSpaceInfo.parking_space_id,
 								parking_space_location: parkingSpaceInfo.parking_space_location,
 								parking_space_owner: parkingSpaceInfo.parking_space_owner,
-								parking_space_state: 1
+								parking_space_state: 0
 							},
 							header: {
 								'custom-header': 'hello', //自定义请求头信息
 								'content-type': 'application/json'
 							},
 							success: (res) => {
-								console.log("put parking space state to 1 succes");
+								console.log("put parking space state to 0 succes");
 
 
 							},
