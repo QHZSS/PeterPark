@@ -104,22 +104,24 @@
                             //Step2, use license_plate to find the user
                               let flag = false;
                               let json2 = {};
+                              let index=0;
                               for(let j = 0; j < this.newsListForUser.length; j++){
                                 if(this.newsListForUser[j].license_plate == this.newsList[i].license_plate){
                                   flag = true;
                                      json2 = JSON.stringify({
-                                    "parkinglot_user_name": this.newsListForUser[j].parkinglot_user_name,
+                                    "user_name": this.newsListForUser[j].user_name,
                                     "license_plate": this.newsListForUser[j].license_plate,
                                     "in_black_list":this.newsListForUser[j].in_black_list,
                                     "parkinglot_user_state": 1
                                   });
+                                     index=j;
                                 }
                               }
                             if(flag) {
                               console.log(json2);
                               //Step3, update user state
                               axios
-                                .put('http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark2/Parkinglotuser/' + this.newsListForUser[j].id, json2, {headers: {'Content-Type': 'application/json'}}
+                                .put('http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark2/Parkinglotuser/' + this.newsListForUser[index].id, json2, {headers: {'Content-Type': 'application/json'}}
                                 ).then((res) => {
                                 console.log(res);
                                 //then, update iot_message_state to iot_message table
@@ -190,22 +192,24 @@
                             //Step2, use license_plate to find the user
                             let flag = false;
                             let json2 = {};
+                            let index=0;
                             for(let j = 0; j < this.newsListForUser.length; j++){
                               if(this.newsListForUser[j].license_plate == this.newsList[i].license_plate){
                                 flag = true;
                                 json2 = JSON.stringify({
-                                  "parkinglot_user_name": this.newsListForUser[j].parkinglot_user_name,
+                                  "user_name": this.newsListForUser[j].user_name,
                                   "license_plate": this.newsListForUser[j].license_plate,
                                   "in_black_list":this.newsListForUser[j].in_black_list,
                                   "parkinglot_user_state": 2
                                 });
+                                index=j;
                               }
                             }
                             if(flag) {
                               console.log(json2);
                               //Step3, update user state
                               axios
-                                .put('http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark2/Parkinglotuser/' + this.newsListForUser[j].id, json2, {headers: {'Content-Type': 'application/json'}}
+                                .put('http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark2/Parkinglotuser/' + this.newsListForUser[index].id, json2, {headers: {'Content-Type': 'application/json'}}
                                 ).then((res) => {
                                 console.log(res);
                                 //then, update iot_message_state to iot_message table
@@ -275,22 +279,24 @@
                             //Step2, use license_plate to find the user
                             let flag = false;
                             let json2 = {};
+                            let index=0;
                             for(let j = 0; j < this.newsListForUser.length; j++){
                               if(this.newsListForUser[j].license_plate == this.newsList[i].license_plate){
                                 flag = true;
                                 json2 = JSON.stringify({
-                                  "parkinglot_user_name": this.newsListForUser[j].parkinglot_user_name,
+                                  "user_name": this.newsListForUser[j].user_name,
                                   "license_plate": this.newsListForUser[j].license_plate,
                                   "in_black_list":this.newsListForUser[j].in_black_list,
                                   "parkinglot_user_state": 0
                                 });
+                                index=j;
                               }
                             }
                             if(flag) {
                               console.log(json2);
                               //Step3, update user state
                               axios
-                                .put('http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark2/Parkinglotuser/' + this.newsListForUser[j].id, json2, {headers: {'Content-Type': 'application/json'}}
+                                .put('http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark2/Parkinglotuser/' + this.newsListForUser[index].id, json2, {headers: {'Content-Type': 'application/json'}}
                                 ).then((res) => {
                                 console.log(res);
                                 //then, update iot_message_state to iot_message table
@@ -448,7 +454,7 @@
         let json = JSON.stringify({
           "license_plate": this.editDetail.license_plate,
           "message": this.editDetail.message,
-          "message_state": 0,
+          "message_state": 1,
         });
         axios
           .post('http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark2/Message', json, {headers: {'Content-Type': 'application/json'}}
