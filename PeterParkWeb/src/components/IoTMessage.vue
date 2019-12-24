@@ -104,7 +104,8 @@
                             //Step2, use license_plate to find the user
                               let flag = false;
                               let json2 = {};
-                              for(let j = 0; j < this.newsListForUser.length; j++){
+                              let j = 0;
+                              for(j = 0; j < this.newsListForUser.length; j++){
                                 if(this.newsListForUser[j].license_plate == this.newsList[i].license_plate){
                                   flag = true;
                                      json2 = JSON.stringify({
