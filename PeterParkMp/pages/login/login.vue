@@ -67,8 +67,13 @@
 									userName:infoRes.userInfo.nickName,
 									userAvatar:infoRes.userInfo.avatarUrl
 								}
+								console.log(userInfoSet);
 								_this.toMain(userInfoSet);
 								
+							},
+							fail(error) {
+								uni.hideLoading();
+								console.log(error)
 							}
 						});
 					},

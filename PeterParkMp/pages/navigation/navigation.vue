@@ -6,13 +6,16 @@
 					<text class="cuIcon-title text-orange "></text>
 					停车场地图
 				</view>
+				<view class="action">
+					<button class="cu-btn bg-blue shadow" @tap="refresh" >刷新</button>
+				</view>
 			</view>
 			<view class="map">
 				<view class="row" v-for="(row, index) in map" :key="index">
 					<view class="col" v-for="(ele, eIndex) in row" :key="eIndex">
 						<view class="col solid" :class="'bg-' + groundColor(ele)" @tap="navigate(ele, index, eIndex)">
-							<text v-if="ele > 900">{{ getParkingSpaceId(ele - 900) }}</text>
-							<text v-else-if="ele >= 1">{{ getParkingSpaceId(ele) }}</text>
+							<text class="block-text" v-if="ele > 900">{{ getParkingSpaceId(ele - 900) }}</text>
+							<text class="block-text" v-else-if="ele >= 1">{{ getParkingSpaceId(ele) }}</text>
 						</view>
 					</view>
 				</view>
@@ -21,10 +24,30 @@
 				<button class="cu-btn bg-red margin-tb-sm lg" @tap="finishParkingSimulator">停车完成IoT模拟检测</button>
 			</view>
 		</view>
-		<view class="navi-desc" v-else-if="userState == 0">
-			<text class="navi-desc-title padding">欢迎来到PeterPark!</text>
-			<text class="navi-desc-text padding">当您进入停车场后，此页面会显示停车场地图及推荐位置</text>
-			<text class="navi-desc-text padding">若您在PeterPark拥有车位，会优先导航到您自己的车位</text>
+		<view>
+			<view class="cu-bar bg-white flex">
+				<view class="action">
+					<text class="cuIcon-title text-orange "></text>
+					停车场地图
+				</view>
+				<view class="action">
+					<button class="cu-btn bg-blue shadow" @tap="refresh" >刷新</button>
+				</view>
+			</view>
+			<view class="map">
+				<view class="row" v-for="(row, index) in map" :key="index">
+					<view class="col" v-for="(ele, eIndex) in row" :key="eIndex">
+						<view class="col solid" :class="'bg-' + groundColor(ele)">
+							<text class="block-text" v-if="ele > 900">{{ getParkingSpaceId(ele - 900) }}</text>
+							<text class="block-text" v-else-if="ele >= 1">{{ getParkingSpaceId(ele) }}</text>
+						</view>
+					</view>
+				</view>
+			</view>
+			<view class="navi-desc" v-if="userState == 0">
+				<text class="navi-desc-text padding">当您进入停车场后，此页面会显示停车场地图及推荐位置</text>
+				<text class="navi-desc-text padding">若您在PeterPark拥有车位，会优先导航到您自己的车位</text>
+			</view>
 		</view>
 	</view>
 </template>
@@ -51,12 +74,14 @@
 		[10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 10000, 0]
 	];
 	export default {
-		computed: mapState(['forcedLogin', 'hasLogin', 'userName', 'userAvatar', 'userAuth', 'orderId','licensePlate','orderSpace']),
+		computed: mapState(['forcedLogin', 'hasLogin', 'userName', 'userAvatar', 'userAuth', 'orderId', 'licensePlate',
+			'orderSpace'
+		]),
 		data() {
 			return {
 				parkingUserInfo: Object,
 				count: 0,
-				userState: 2,
+				userState: 0,
 				map: this.map,
 				parkingSpace: {},
 				adjMatrix: [
@@ -84,50 +109,66 @@
 				road: this.road,
 				traffic: [],
 				startTime: "",
-				endTime:"",
-				spaceId:-1
+				endTime: "",
+				spaceId: -1
 			};
 		},
 		watch: {
 			'parkingUserInfo.user_state': function(val, oldVal) {
 				let that = this;
-				if(oldVal==0 && val ==1){
+				if (oldVal == 0 && val == 1) {
 					uni.showLoading({
 						title: '正在检测权限'
 					});
-					if(this.parkingUserInfo.in_black_list==0){
+					if (this.parkingUserInfo.in_black_list == 0) {
 						this.userState = 1;
-						let date=new Date().toUTCString();
+						let date = new Date().toUTCString();
 						uni.request({
 							url: 'http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark2/Iotmessage/',
 							method: "POST",
 							data: {
-								"license_plate":that.licensePlate,
-								"message_time":date,
-								"iot_message_state":1,
-								"user_state":2
+								"license_plate": that.licensePlate,
+								"message_time": date,
+								"iot_message_state": 0,
+								"user_state": 2
 							},
 							success: res => {
-								
+
 								console.log(res.data);
 							}
 						})
-					}else{
+					} else {
 						uni.hideLoading();
+						let date = new Date().toUTCString();
+						uni.request({
+							url: 'http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark2/Iotmessage/',
+							method: "POST",
+							data: {
+								"license_plate": that.licensePlate,
+								"message_time": date,
+								"iot_message_state": 0,
+								"user_state": 0
+							},
+							success: res => {
+						
+								console.log(res.data);
+							}
+						})
 						uni.showModal({
 							title: '提示',
 							content: '您的账号信息在黑名单中，禁止停车'
 						});
+						
 						this.userState = -1;
 					}
-				}else if (oldVal == 1 && val == 2) {
+				} else if (oldVal == 1 && val == 2) {
 					uni.hideLoading();
-					this.userState=2;
+					this.userState = 2;
 					uni.showModal({
 						title: '提示',
 						content: '您已进入停车场，已为您推荐最优车位'
 					});
-					
+
 					this.startTime = new Date().toUTCString();
 					uni.request({
 						url: 'http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark2/Parkingorder/',
@@ -150,36 +191,37 @@
 							});
 						}
 					});
-				}else if(oldVal==2 && val ==0){
-					this.userState=3
-					this.endTime=new Date().toUTCString();
+				} else if (oldVal == 2 && val == 0) {
+					this.userState = 3
+					this.endTime = new Date().toUTCString();
 					uni.request({
-						url: 'http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark2/Parkingorder/'+that.orderId,
+						url: 'http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark2/Parkingorder/' + that.orderId,
 						method: "PUT",
 						data: {
 							"parking_user_name": that.userName,
 							"start_time": this.startTime,
-							"end_time":this.endTime,
+							"end_time": this.endTime,
 							"order_state": 2,
-							"parking_space_id":this.spaceId
+							"parking_space_id": this.spaceId
 						},
 						success: res => {
 							console.log(res.data);
 							uni.request({
-								url: 'http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark2/Parkingspace/'+that.orderSpace,
+								url: 'http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark2/Parkingspace/' + that.orderSpace,
 								success: res => {
 									console.log(res.data);
 									uni.request({
-										url: 'http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark2/Parkingspace/'+that.orderSpace,
+										url: 'http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark2/Parkingspace/' + that.orderSpace,
 										method: "PUT",
 										data: {
-											"parking_space_id":res.data.parking_space_id,
+											"parking_space_id": res.data.parking_space_id,
 											"parking_space_location": res.data.parking_space_location,
 											"parking_space_owner": res.data.parking_space_owner,
-											"parking_space_state":"1"
+											"parking_space_state": "1"
 										},
 										success: res => {
 											console.log(res.data);
+											this.userState = 0;
 										}
 									});
 								}
@@ -187,16 +229,16 @@
 						}
 					});
 					uni.showModal({
-					    title: '支付提示',
-					    content: '您已离开停车场，请支付车费',
-						showCancel:false,
-					    success: function (res) {
-					        if (res.confirm) {
-					            uni.navigateTo({
-					            	url:"../pay/pay"
-					            })
-					        } 
-					    }
+						title: '支付提示',
+						content: '您已离开停车场，请支付车费',
+						showCancel: false,
+						success: function(res) {
+							if (res.confirm) {
+								uni.navigateTo({
+									url: "../pay/pay"
+								})
+							}
+						}
 					});
 				}
 			},
@@ -206,7 +248,7 @@
 			if (this.hasLogin) {
 				while (this.count < 1000) {
 					setTimeout(() => {
-						if (this.userState == 0 || this.userState==1|| this.userState==2) {
+						if (this.userState == 0 || this.userState == 1 || this.userState == 2) {
 							uni.request({
 								url: 'http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark2/User/?User.user_name=' + that.userName, //仅为示例，并非真实接口地址。
 								success: res => {
@@ -235,7 +277,17 @@
 			});
 		},
 		methods: {
-			...mapMutations(['updateOrderId','updateOrderSpace']),
+			...mapMutations(['updateOrderId', 'updateOrderSpace']),
+			refresh(){
+				uni.request({
+					url: 'http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark2/Parkingspace/',
+					success: res => {
+						this.parkingSpace = res.data.Parkingspace;
+				
+					}
+				});
+				this.$forceUpdate();
+			},
 			recommendSpace() {
 				let that = this;
 				let index = -1;
@@ -257,14 +309,11 @@
 					let min = Math.min.apply(null, distance);
 					index = distance.indexOf(min);
 				}
-				console.log(index);
-
 				let pos = this.parkingSpace[index].parking_space_location.split(',');
 				pos[0] = parseInt(pos[0]);
-				pos[1] = parseInt(pos[1]);
-				if (that.userAuth == 'parkingSpaceOwner') {
-					index++;
-				}
+				pos[1] = parseInt(pos[1]);	
+
+				index++;
 				this.navigate(index, pos[0], pos[1]);
 			},
 			groundColor(ele) {
@@ -309,8 +358,8 @@
 				return this.parkingSpace[index - 1].parking_space_id;
 			},
 			navigate(ele, row, col) {
-				if(ele>900){
-					ele=ele-900;
+				if (ele > 900) {
+					ele = ele - 900;
 				}
 				uni.request({
 					url: 'http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark2/Parkinglottraffic/',
@@ -343,7 +392,7 @@
 				if (this.parkingSpace[index].parking_space_state == 0) {
 					return;
 				}
-				this.spaceId=index+1;
+				this.spaceId = index + 1;
 				let pos = this.parkingSpace[index].parking_space_location.split(',');
 				pos[0] = parseInt(pos[0]);
 				pos[1] = parseInt(pos[1]);
@@ -598,46 +647,51 @@
 				console.log(this.path);
 			},
 			finishParkingSimulator() {
-				let that=this;
-				let date=new Date().toUTCString();
+				let that = this;
+				let date = new Date().toUTCString();
 				uni.request({
 					url: 'http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark2/Iotmessage/',
 					method: "POST",
 					data: {
-						"license_plate":that.licensePlate,
-						"message_time":date,
-						"parking_space_id":this.spaceId,
-						"iot_message_state":1,
-						"user_state":3
+						"license_plate": that.licensePlate,
+						"message_time": date,
+						"parking_space_id": this.spaceId,
+						"iot_message_state": 1,
+						"user_state": 3
 					},
 					success: res => {
 						console.log(res.data);
 						uni.request({
-							url: 'http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark2/Parkingspace/?Parkingspace.parking_space_id='+this.spaceId,
+							url: 'http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark2/Parkingspace/?Parkingspace.parking_space_id=' +
+								this.spaceId,
 							success: res => {
 								this.updateOrderSpace(res.data.Parkingspace[0].id);
 								uni.request({
-									url: 'http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark2/Parkingspace/'+that.orderSpace,
+									url: 'http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark2/Parkingspace/' + that.orderSpace,
 									method: "PUT",
 									data: {
-										"parking_space_id":res.data.Parkingspace[0].parking_space_id,
+										"parking_space_id": res.data.Parkingspace[0].parking_space_id,
 										"parking_space_location": res.data.Parkingspace[0].parking_space_location,
 										"parking_space_owner": res.data.Parkingspace[0].parking_space_owner,
-										"parking_space_state":"0"
+										"parking_space_state": "0"
 									},
 									success: res => {
 										console.log(res.data);
 										uni.request({
-											url: 'http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark2/Parkingorder/'+that.orderId,
+											url: 'http://118.31.77.203:8080/Entity/U21a840a21ebf11/PeterPark2/Parkingorder/' + that.orderId,
 											method: "PUT",
 											data: {
 												"parking_user_name": that.userName,
 												"start_time": date,
 												"order_state": 1,
-												"parking_space_id":this.spaceId
+												"parking_space_id": this.spaceId
 											},
 											success: res => {
 												console.log(res.data);
+												uni.showModal({
+													title: "提示",
+													content: "停车成功！您的停车位为：" + this.spaceId
+												})
 											}
 										});
 									}
@@ -646,7 +700,7 @@
 						});
 					}
 				});
-				
+
 			}
 		}
 	};
@@ -670,18 +724,24 @@
 		align-items: center;
 		justify-content: space-around;
 	}
-	.navi-desc{
+
+	.navi-desc {
 		display: flex;
 		flex-direction: column;
 		align-items: center;
-		justify-content: space-between;
 	}
-	.navi-desc-title{
-		font-size: 50rpx;
-		color: #8799A3;
-	}
-	.navi-desc-text{
+
+	.navi-desc-title {
 		font-size: 27rpx;
 		color: #8799A3;
+	}
+
+	.navi-desc-text {
+		font-size: 27rpx;
+		color: #8799A3;
+	}
+
+	.block-text {
+		font-size: 25rpx;
 	}
 </style>

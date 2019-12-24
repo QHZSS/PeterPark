@@ -68,8 +68,10 @@
               //this.dateTime = this.dateTime.toDateString();
               this.newsListForStatistics = [];
               this.daysList = [];
+              let preTime=this.dateTime;
               for(let i = 14; i >= 0; i--) {
-                this.preDayTime = new Date(this.dateTime - 24*60*60*1000*i);
+
+                this.preDayTime = new Date(preTime-preTime%(24*60*60*1000) - 24*60*60*1000*i);
                 this.daysList.push(
                   this.preDayTime.toDateString()
                 );
@@ -83,7 +85,16 @@
                 for(let i = 0; i < this.newsList.length; i++){
                   if(this.newsList[i].end_time) {
                     let orderDate = this.newsList[i].end_time;
-                    let j = parseInt((this.dateTime - Date.parse(orderDate)) / (24 * 60 * 60 * 1000));
+                    let x=preTime-preTime%(24*60*60*1000);
+                    let y=Date.parse(orderDate);
+                    let j=0;
+                    if(x>=y){
+                        j = parseInt((x -y ) / (24 * 60 * 60 * 1000));
+                    }else{
+                        j=-1;
+                  }
+                    console.log(j);
+                    console.log(new Date().toUTCString());
                     this.newsListForStatistics[13 - j].orderNumber++;
                     if(this.newsList[i].order_state == 3 && this.newsList[i].order_fee) {
                       this.newsListForStatistics[13 - j].income += this.newsList[i].order_fee
@@ -141,7 +152,7 @@
           yAxis: {
             type: 'value',
             min: 0,
-            max: 100,
+            max: 200,
             interval: 20,
             axisLabel: {
               formatter: '{value}'
