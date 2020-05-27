@@ -1,6 +1,8 @@
 # PeterPark
 An intellegent parking system
 
+2020.5.17
+
 #### 目前要开发的功能:
 + 用户登录
 （从数据库读取用户信息及车牌信息）检测是不是业主，是业主多两个功能条
